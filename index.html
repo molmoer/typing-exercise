@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>专业术语英语打字练习</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef4ff, #f8fbff);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    #topbar {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 14px 16px;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 280px;
+    }
+
+    .top-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    select,
+    button {
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      outline: none;
+    }
+
+    select {
+      min-width: 170px;
+      background: #fff;
+    }
+
+    #startBtn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #startBtn:disabled {
+      background: #93c5fd;
+      cursor: not-allowed;
+    }
+
+    #timer {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0f172a;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      min-width: 90px;
+      text-align: center;
+    }
+
+    #mainArea {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #progress {
+      font-size: 18px;
+      color: #475569;
+      margin-bottom: 16px;
+      min-height: 24px;
+    }
+
+    #chineseWord {
+      font-size: 56px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 16px;
+      max-width: 80vw;
+      line-height: 1.25;
+    }
+
+    #pronunciationArea {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      min-height: 48px;
+      flex-wrap: wrap;
+      max-width: 90vw;
+    }
+
+    #speakBtn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    #speakBtn:hover:not(:disabled) {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+    }
+
+    #speakBtn:disabled {
+      background: #a7f3d0;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #phoneticText {
+      font-size: 24px;
+      color: #475569;
+      font-style: italic;
+      font-family: "Lucida Sans Unicode", "Arial Unicode MS", "DejaVu Sans", sans-serif;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    #inputArea {
+      min-height: 110px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+
+    .word-slot {
+      min-width: 90px;
+      min-height: 62px;
+      padding: 6px 10px;
+      font-size: 40px;
+      font-weight: 700;
+      border-bottom: 5px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 1px;
+      color: #111827;
+      background: rgba(255, 255, 255, 0.65);
+      border-radius: 8px 8px 0 0;
+    }
+
+    .word-slot.active {
+      border-bottom-color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+    }
+
+    .placeholder {
+      color: #c7cdd8;
+      font-weight: normal;
+    }
+
+    .ok {
+      color: #16a34a;
+    }
+
+    .bad {
+      color: #dc2626;
+      text-decoration: underline;
+    }
+
+    #hint {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    #endBtn {
+      position: fixed;
+      right: 26px;
+      bottom: 26px;
+      z-index: 20;
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
+    }
+
+    #endBtn:disabled {
+      background: #fca5a5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 20px;
+    }
+
+    .dialog {
+      width: min(920px, 94vw);
+      max-height: 86vh;
+      overflow: auto;
+      background: white;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .dialog h2 {
+      margin-top: 0;
+      color: #111827;
+    }
+
+    .summary-stats {
+      font-size: 18px;
+      line-height: 2;
+      color: #1f2937;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .wrong-item {
+      border: 1px solid #fecaca;
+      background: #fff5f5;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    .wrong-item .zh {
+      font-size: 20px;
+      font-weight: bold;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .line-label {
+      color: #475569;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .correct-word {
+      color: #15803d;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .wrong-word {
+      color: #dc2626;
+      font-weight: bold;
+      text-decoration: underline;
+      margin-right: 10px;
+    }
+
+    .missed-word {
+      color: #94a3b8;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .all-answer {
+      color: #334155;
+      margin-top: 6px;
+    }
+
+    #closeSummaryBtn {
+      margin-top: 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 10px 18px;
+    }
+
+    @media (max-width: 700px) {
+      #chineseWord {
+        font-size: 36px;
+      }
+
+      .word-slot {
+        font-size: 28px;
+        min-width: 64px;
+        min-height: 48px;
+      }
+
+      #topbar {
+        min-width: auto;
+        right: 18px;
+      }
+
+      #phoneticText {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="topbar">
+    <div class="top-row">
+      <label for="categorySelect" style="font-weight:bold;">选择大类：</label>
+      <select id="categorySelect">
+        <option value="">请选择</option>
+      </select>
+      <button id="startBtn" disabled>开始练习</button>
+    </div>
+    <div class="top-row">
+      <span style="font-weight:bold;">计时：</span>
+      <div id="timer">00:00</div>
+    </div>
+  </div>
+
+  <div id="mainArea">
+    <div id="progress"></div>
+    <div id="chineseWord">请选择大类，然后点击“开始练习”</div>
+
+    <div id="pronunciationArea">
+      <button id="speakBtn" disabled title="本地音标优先；未收录时尝试在线音标">🔊 发音</button>
+      <span id="phoneticText"></span>
+    </div>
+
+    <div id="inputArea"></div>
+    <div id="hint">
+      输入说明：字母错误会标红；多个英文单词用空格切换；按 Enter 提交并下一题；点击“发音”可听读音并查看音标。
+    </div>
+  </div>
+
+  <button id="endBtn" disabled>结束练习</button>
+
+  <div id="summaryOverlay" class="overlay" hidden>
+    <div class="dialog">
+      <h2>练习总结</h2>
+      <div id="summaryStats" class="summary-stats"></div>
+      <h3>错误报告</h3>
+      <div id="errorReport"></div>
+      <button id="closeSummaryBtn">关闭并返回</button>
+    </div>
+  </div>
+
+  <!--
+    下面是词库原始数据。
+    程序会自动解析“中文：英文”格式的行。
+  -->
+  <script type="text/plain" id="raw-data">
+一、 结构名称
+曲轴：  crankshaft
+锻钢曲轴：  forged crankshaft
+球铁曲轴：  nodular crankshaft
+大头 / 后端：  rear end
+小头 / 前端：  front end
+轴 径：  journal
+大头轴径：  the rear end journal
+小头轴径：  the front end journal
+主轴径：  main journal
+连杆轴径：  pin journal
+中间主轴径： center main journal
+连杆顶：  pin top
+连杆侧面：  pin bearing side face
+曲柄臂：  crank web
+平衡铁：  counterweight
+轴承孔：  bearing hole
+止口：  located mouth
+稳钉：  position
+连杆侧面凹面：  concave
+凸台：  side step
+止推面：  thrust face
+中心距：  center distance
+键槽：  keyway
+螺纹丝孔：  screw hole
+直油孔：  main oil hole
+斜油孔：  pin oil hole
+
+二、 加工工艺
+几何中心：  geometry center
+质量中心：  mass center
+粗加工：  rough machining
+半精加工：  semi-finish machining
+精加工：  finish machining
+车：  turning
+铣：  milling
+钻：  drilling
+磨：  grinding
+镗：  boring
+珩磨：  honing
+车－车拉：  turn turn broaching
+圆角 滚压：  fillet rolling
+车挤压：  turn burnishing
+倒角：  chamfering
+去毛刺：  burr removed
+动平衡：  dynamic balance
+抛光：  polishing
+清洗：  washing
+防锈：  anti corrosion
+防锈剂：  antirust
+包装：  packing / packaging
+圆角：  fillet
+圆角半径：  fillet radii
+工装：  dressing 
+检具：  gage 
+基准：  benchmark
+车床： lathe
+轴向的：  axial
+加工工艺：  machining technics
+特殊特性：  special characteristic
+粗糙度：  roughness
+毛坯：  raw part
+尺寸：  dimension
+清洁度：  cleanliness
+开档：  open journal width
+产能：  capacity
+
+三、 形位公差
+公差：  tolerance
+圆柱度：  cylindricity
+平行度：  parallelism
+垂直度：  verticality / perpendicularity
+直线度：  linearity
+位置度：  location / position
+对称度：  symmetry
+倾斜度：  slant
+跳动：  runout
+全跳动：  total indicator runout
+V  型块：  V block
+
+四、 探伤
+探伤：  detecting / detection
+磁粉探伤：  magnetic particle inspection
+荧光磁粉探伤： fluorescent magnetic particle inspection
+剩磁：  residual magnetism
+退磁：  demagnetize
+磨削裂纹：  grinding cracks
+热处理裂纹：  heat treatment cracks
+磨削烧伤：  grinding burns
+流线：  flow lines
+非金属夹杂：  non-metallic inclusions
+周向磁化：  circular magnetization
+纵向磁化：  longitudinal magnetization
+
+五、 热处理
+热处理：  heat treatment
+正火：  normalizing
+淬火：  hardening/quenching
+回火 / 时效：  tempering
+退火：  annealing
+调质：  quench-tempering
+等温退火：  isothermal annealing
+有效深度：  effective Case Depth
+抛丸：  shot blasting
+校直：  straighten
+去应力：  stress relieving
+金相学的：  metallographic
+冶金学的：  metallurgical
+机械性能：  mechanical property
+化学成分：  chemical composition
+抗拉强度：  tensile strength
+屈服强度：  yield strength
+延伸率：  elongation
+断面收缩：  reduction of Area
+表面硬度：  surface Hardness
+锻后控冷：  as-Forged and Controlled Cooled
+抗拉试棒：  tensile specimen
+金相试块：  microstructural sample
+微观组织：  microstructure
+铁素体：  ferrite
+珠光体：  pearlite
+贝氏体：  bainite
+奥氏体：  austenite
+马氏体：  martensite
+索氏体：  sorbite
+晶粒度：  grain size
+
+六、 其它
+柴油机：  diesel engine
+汽油机：  gasoline engine
+拔模角度：  draft angle
+相位角：  phase angle
+飞轮：  flywheel
+汽缸：  cylinder
+缸体：  cylinder block
+缸盖：  cylinder head
+齿轮：  gear
+胀断连杆：  fracture-split connecting rod
+量产：  mass production / volume production / serial production
+内燃机：  internal combustion engine
+扭矩：  torque
+马力：  horse power
+旋转方向：  direction of rotation
+顺时针：  clockwise
+逆时针：  counter-clockwise
+风冷：  air cooling
+水冷：  water cooling
+排放：  emission
+排气系统：  exhaust system
+润滑油：  lubricant
+金属切削：  metal cutting
+机床：  machine tool
+金属工艺学：  technology of metals / metal technology
+刀具：  cutter
+摩擦：  friction
+联结：  link
+传动：  drive/transmission
+弹性：  elasticity
+频率特性：  frequency characteristic
+误差：  error
+响应：  response
+定位：  positioning
+机床夹具：  jig
+动力学：  dynamic
+运动学：  kinematic
+静力学：  static
+分析力学：  analytical mechanics
+拉伸：  pulling
+压缩：  hitting
+剪切：  shear
+扭转：  twist / torsion
+弯曲应力：  bending stress
+强度：  intensity / strength
+几何形状：  geometrical
+精度：  precision
+正弦形的：  sinusoid
+机械加工余量： machining allowance
+变形力：  deforming force
+变形：  deformation
+应力：  stress
+硬度：  rigidity 或 hardness
+脱碳：  decarburization
+渗碳：  carburization
+外圆磨削：  external grinding
+内圆磨削：  internal grinding
+平面磨削：  plane grinding
+变速箱：  gearbox
+离合器： clutch
+绞孔： fraising / reaming
+绞刀： reamer
+螺纹加工： thread processing
+螺钉： screw
+铣刀： milling cutter
+功率： power
+工件： workpiece
+齿轮加工：  gear machining
+运动： main movement
+切削深度： cutting depth
+加工中心： machining center
+车刀： lathe tool
+钻削镗削： bore
+车削： turning
+磨床： grinder
+钳工：  locksmith
+锻：  forge
+压模：  stamping
+焊 ：  weld
+拉床： broaching machine
+拉孔： broaching
+装配： assembling
+铸造： found / casting / foundry
+流体动力学： fluid dynamics
+流体力学： fluid mechanics
+加工： machining
+切线： tangent
+气压： air pressure / pneumatic pressure
+稳定性： stability
+介质： medium
+失效： invalidation
+载荷： load
+安全系数：  safety factor
+可靠性： reliability
+螺旋： helix
+键： key
+销： pin
+滚动轴承： rolling bearing
+滑动轴承： sliding bearing
+弹簧： spring
+制动器： arrester brake
+皮带： strap
+精加工： finish machining
+粗加工： rough machining
+腐蚀： rust
+氧化： oxidation
+磨损： wear
+耐用度： durability
+残余应力： residual stress
+扭力： torsion / torque
+冷加工： cold machining
+电动机： electromotor
+过盈配合： interference fit
+热加工： hotwork
+摄像头： camera
+倒角： rounding chamfer / chamfer
+优化设计： optimal design
+有限元： finite element
+滚齿： hobbing
+插齿： gear shaping
+伺服电机： actuating motor / servo motor
+铣床： milling machine
+钻床： drill machine / drilling machine
+镗床： boring machine
+电火花加工： electric spark machining
+电火花线切割加工： electrical discharge wire cutting
+相图： phase diagram
+固态相变： solid state phase changes
+有色金属： nonferrous metal
+电化学腐蚀： electrochemical corrosion
+板料冲压： sheet metal parts
+孔加工： spot facing machining / hole machining
+车间： workshop
+工程技术人员： engineer
+机械制图： mechanical drawing
+投影： projection
+视图： view
+剖视图： profile chart / section view
+标准件： standard component / master piece / master sample
+零件图： part drawing
+装配图： assembly drawing
+尺寸标注： size marking
+技术要求： technical requirements
+刚度： rigidity
+内力： internal force
+位移： displacement
+截面： section
+疲劳极限： fatigue limit
+断裂： fracture / crack
+塑性变形： plastic distortion / plastic deformation
+脆性材料： brittleness material
+刚度准则： rigidity criterion
+垫圈： washer
+垫片： spacer
+虚约束： passive constraint
+曲柄： crank
+摇杆： racker / rocker
+凸轮： cams
+游标卡尺： slide caliper / vernier caliper
+千分尺： micrometer calipers / micrometer
+概率： probability
+随机变量： random variable
+排列组合： permutation and combination
+机械零件： mechanical parts
+砂轮： grinding wheel
+  </script>
+
+  <script>
+    /**
+     * 本地音标表
+     *
+     * 规则：
+     * 1. 键统一使用小写；
+     * 2. 多个空格会被归一化为单个空格；
+     * 3. 优先查完整词条；
+     * 4. 如果完整词条没有，但每个单词都有本地音标，则自动拼接；
+     * 5. 本地音标表比在线 API 更稳定，建议逐步人工维护。
+     */
+    const LOCAL_PHONETICS = {
+      // =====================
+      // 通用缩写
+      // =====================
+      "ecn": "/ˌiː siː ˈɛn/",
+      "eco": "/ˌiː siː ˈoʊ/",
+      "pcn": "/ˌpiː siː ˈɛn/",
+      "sop": "/ˌɛs oʊ ˈpiː/",
+      "bom": "/ˌbiː oʊ ˈɛm/",
+      "ps": "/ˌpiː ˈɛs/",
+      "spec": "/spɛk/",
+      "dwg": "/ˌdiː ˌdʌbəljuː ˈdʒiː/",
+
+      // =====================
+      // 常用基础词
+      // =====================
+      "the": "/ðə/",
+      "of": "/əv/",
+      "and": "/ənd/",
+      "or": "/ɔːr/",
+      "for": "/fɔːr/",
+      "v": "/ˈviː/",
+      "block": "/blɑːk/",
+      "center": "/ˈsentər/",
+      "main": "/meɪn/",
+      "pin": "/pɪn/",
+      "front": "/frʌnt/",
+      "rear": "/rɪr/",
+      "end": "/end/",
+      "oil": "/ɔɪl/",
+      "hole": "/hoʊl/",
+      "tool": "/tuːl/",
+      "machine": "/məˈʃiːn/",
+      "wheel": "/wiːl/",
+      "view": "/vjuː/",
+      "section": "/ˈsekʃən/",
+      "drawing": "/ˈdrɔːɪŋ/",
+      "part": "/pɑːrt/",
+      "assembly": "/əˈsembli/",
+      "size": "/saɪz/",
+      "technical": "/ˈteknɪkəl/",
+      "requirements": "/rɪˈkwaɪərmənts/",
+      "standard": "/ˈstændərd/",
+      "component": "/kəmˈpoʊnənt/",
+      "master": "/ˈmæstər/",
+      "piece": "/piːs/",
+      "sample": "/ˈsæmpl/",
+
+      // =====================
+      // 结构名称
+      // =====================
+      "crankshaft": "/ˈkræŋkˌʃæft/",
+      "forged": "/fɔːrdʒd/",
+      "forged crankshaft": "/fɔːrdʒd ˈkræŋkˌʃæft/",
+      "nodular": "/ˈnɑːdʒələr/",
+      "nodular crankshaft": "/ˈnɑːdʒələr ˈkræŋkˌʃæft/",
+      "rear end": "/rɪr end/",
+      "front end": "/frʌnt end/",
+      "journal": "/ˈdʒɝːnəl/",
+      "the rear end journal": "/ðə rɪr end ˈdʒɝːnəl/",
+      "the front end journal": "/ðə frʌnt end ˈdʒɝːnəl/",
+      "main journal": "/meɪn ˈdʒɝːnəl/",
+      "pin journal": "/pɪn ˈdʒɝːnəl/",
+      "center main journal": "/ˈsentər meɪn ˈdʒɝːnəl/",
+      "top": "/tɑːp/",
+      "pin top": "/pɪn tɑːp/",
+      "bearing": "/ˈberɪŋ/",
+      "side": "/saɪd/",
+      "face": "/feɪs/",
+      "pin bearing side face": "/pɪn ˈberɪŋ saɪd feɪs/",
+      "crank": "/kræŋk/",
+      "web": "/web/",
+      "crank web": "/kræŋk web/",
+      "counterweight": "/ˈkaʊntərweɪt/",
+      "bearing hole": "/ˈberɪŋ hoʊl/",
+      "located": "/ˈloʊkeɪtɪd/",
+      "mouth": "/maʊθ/",
+      "position": "/pəˈzɪʃən/",
+      "concave": "/ˈkɑːnkeɪv/",
+      "step": "/step/",
+      "thrust": "/θrʌst/",
+      "distance": "/ˈdɪstəns/",
+      "keyway": "/ˈkiːweɪ/",
+      "screw": "/skruː/",
+      "screw hole": "/skruː hoʊl/",
+      "main oil hole": "/meɪn ɔɪl hoʊl/",
+      "pin oil hole": "/pɪn ɔɪl hoʊl/",
+
+      // =====================
+      // 加工工艺
+      // =====================
+      "geometry": "/dʒiˈɑːmətri/",
+      "geometry center": "/dʒiˈɑːmətri ˈsentər/",
+      "mass": "/mæs/",
+      "mass center": "/mæs ˈsentər/",
+      "rough": "/rʌf/",
+      "machining": "/məˈʃiːnɪŋ/",
+      "rough machining": "/rʌf məˈʃiːnɪŋ/",
+      "semi-finish": "/ˌsemi ˈfɪnɪʃ/",
+      "semi-finish machining": "/ˌsemi ˈfɪnɪʃ məˈʃiːnɪŋ/",
+      "finish": "/ˈfɪnɪʃ/",
+      "finish machining": "/ˈfɪnɪʃ məˈʃiːnɪŋ/",
+      "turning": "/ˈtɝːnɪŋ/",
+      "milling": "/ˈmɪlɪŋ/",
+      "drilling": "/ˈdrɪlɪŋ/",
+      "grinding": "/ˈɡraɪndɪŋ/",
+      "boring": "/ˈbɔːrɪŋ/",
+      "honing": "/ˈhoʊnɪŋ/",
+      "turn": "/tɝːn/",
+      "broaching": "/ˈbroʊtʃɪŋ/",
+      "turn turn broaching": "/tɝːn tɝːn ˈbroʊtʃɪŋ/",
+      "fillet": "/ˈfɪlɪt/",
+      "rolling": "/ˈroʊlɪŋ/",
+      "fillet rolling": "/ˈfɪlɪt ˈroʊlɪŋ/",
+      "burnishing": "/ˈbɝːnɪʃɪŋ/",
+      "turn burnishing": "/tɝːn ˈbɝːnɪʃɪŋ/",
+      "chamfering": "/ˈtʃæmfərɪŋ/",
+      "burr": "/bɝː/",
+      "removed": "/rɪˈmuːvd/",
+      "burr removed": "/bɝː rɪˈmuːvd/",
+      "dynamic": "/daɪˈnæmɪk/",
+      "balance": "/ˈbæləns/",
+      "dynamic balance": "/daɪˈnæmɪk ˈbæləns/",
+      "polishing": "/ˈpɑːlɪʃɪŋ/",
+      "washing": "/ˈwɑːʃɪŋ/",
+      "anti": "/ˈæntaɪ/",
+      "corrosion": "/kəˈroʊʒən/",
+      "anti corrosion": "/ˈæntaɪ kəˈroʊʒən/",
+      "antirust": "/ˈæntaɪrʌst/",
+      "packing": "/ˈpækɪŋ/",
+      "packaging": "/ˈpækɪdʒɪŋ/",
+      "radii": "/ˈreɪdiaɪ/",
+      "fillet radii": "/ˈfɪlɪt ˈreɪdiaɪ/",
+      "dressing": "/ˈdresɪŋ/",
+      "facility": "/fəˈsɪləti/",
+      "tooling": "/ˈtuːlɪŋ/",
+      "gage": "/ɡeɪdʒ/",
+      "gauge": "/ɡeɪdʒ/",
+      "benchmark": "/ˈbentʃmɑːrk/",
+      "lathe": "/leɪð/",
+      "axial": "/ˈæksiəl/",
+      "technics": "/ˈteknɪks/",
+      "machining technics": "/məˈʃiːnɪŋ ˈteknɪks/",
+      "special": "/ˈspeʃəl/",
+      "characteristic": "/ˌkerəktəˈrɪstɪk/",
+      "special characteristic": "/ˈspeʃəl ˌkerəktəˈrɪstɪk/",
+      "roughness": "/ˈrʌfnəs/",
+      "blank": "/blæŋk/",
+      "raw": "/rɔː/",
+      "dimension": "/dɪˈmenʃən/",
+      "cleanliness": "/ˈklenlinəs/",
+      "open": "/ˈoʊpən/",
+      "width": "/wɪdθ/",
+      "open journal width": "/ˈoʊpən ˈdʒɝːnəl wɪdθ/",
+      "capacity": "/kəˈpæsəti/",
+
+      // =====================
+      // 形位公差
+      // =====================
+      "tolerance": "/ˈtɑːlərəns/",
+      "cylindricity": "/ˌsɪlɪnˈdrɪsəti/",
+      "parallelism": "/ˈperəlelɪzəm/",
+      "verticality": "/ˌvɝːtɪˈkæləti/",
+      "perpendicularity": "/pərˌpendɪkjəˈlærəti/",
+      "linearity": "/ˌlɪniˈærəti/",
+      "location": "/loʊˈkeɪʃən/",
+      "symmetry": "/ˈsɪmətri/",
+      "slant": "/slænt/",
+      "runout": "/ˈrʌnaʊt/",
+      "total": "/ˈtoʊtəl/",
+      "indicator": "/ˈɪndɪkeɪtər/",
+      "total indicator runout": "/ˈtoʊtəl ˈɪndɪkeɪtər ˈrʌnaʊt/",
+      "v block": "/ˈviː blɑːk/",
+
+      // =====================
+      // 探伤
+      // =====================
+      "detecting": "/dɪˈtektɪŋ/",
+      "detection": "/dɪˈtekʃən/",
+      "magnetic": "/mæɡˈnetɪk/",
+      "particle": "/ˈpɑːrtɪkəl/",
+      "inspection": "/ɪnˈspekʃən/",
+      "magnetic particle inspection": "/mæɡˈnetɪk ˈpɑːrtɪkəl ɪnˈspekʃən/",
+      "fluorescent": "/ˌflʊəˈresənt/",
+      "fluorescent magnetic particle inspection": "/ˌflʊəˈresənt mæɡˈnetɪk ˈpɑːrtɪkəl ɪnˈspekʃən/",
+      "residual": "/rɪˈzɪdʒuəl/",
+      "magnetism": "/ˈmæɡnətɪzəm/",
+      "residual magnetism": "/rɪˈzɪdʒuəl ˈmæɡnətɪzəm/",
+      "demagnetize": "/ˌdiːˈmæɡnətaɪz/",
+      "cracks": "/kræks/",
+      "grinding cracks": "/ˈɡraɪndɪŋ kræks/",
+      "heat": "/hiːt/",
+      "treatment": "/ˈtriːtmənt/",
+      "heat treatment cracks": "/hiːt ˈtriːtmənt kræks/",
+      "burns": "/bɝːnz/",
+      "grinding burns": "/ˈɡraɪndɪŋ bɝːnz/",
+      "flow": "/floʊ/",
+      "lines": "/laɪnz/",
+      "flow lines": "/floʊ laɪnz/",
+      "non-metallic": "/ˌnɑːn məˈtælɪk/",
+      "inclusions": "/ɪnˈkluːʒənz/",
+      "non-metallic inclusions": "/ˌnɑːn məˈtælɪk ɪnˈkluːʒənz/",
+      "circular": "/ˈsɝːkjələr/",
+      "magnetization": "/ˌmæɡnətəˈzeɪʃən/",
+      "circular magnetization": "/ˈsɝːkjələr ˌmæɡnətəˈzeɪʃən/",
+      "longitudinal": "/ˌlɑːndʒəˈtuːdənəl/",
+      "longitudinal magnetization": "/ˌlɑːndʒəˈtuːdənəl ˌmæɡnətəˈzeɪʃən/",
+
+      // =====================
+      // 热处理
+      // =====================
+      "heat treatment": "/hiːt ˈtriːtmənt/",
+      "normalizing": "/ˈnɔːrməlaɪzɪŋ/",
+      "hardening": "/ˈhɑːrdənɪŋ/",
+      "quenching": "/ˈkwentʃɪŋ/",
+      "tempering": "/ˈtempərɪŋ/",
+      "annealing": "/əˈniːlɪŋ/",
+      "quench-tempering": "/ˌkwentʃ ˈtempərɪŋ/",
+      "isothermal": "/ˌaɪsəˈθɝːməl/",
+      "isothermal annealing": "/ˌaɪsəˈθɝːməl əˈniːlɪŋ/",
+      "effective": "/ɪˈfektɪv/",
+      "case": "/keɪs/",
+      "depth": "/depθ/",
+      "effective case depth": "/ɪˈfektɪv keɪs depθ/",
+      "shot": "/ʃɑːt/",
+      "blasting": "/ˈblæstɪŋ/",
+      "shot blasting": "/ʃɑːt ˈblæstɪŋ/",
+      "straighten": "/ˈstreɪtən/",
+      "stress": "/stres/",
+      "relieving": "/rɪˈliːvɪŋ/",
+      "stress relieving": "/stres rɪˈliːvɪŋ/",
+      "metallographic": "/ˌmetəloʊˈɡræfɪk/",
+      "metallurgical": "/ˌmetəlɝːdʒɪkəl/",
+      "mechanical": "/məˈkænɪkəl/",
+      "property": "/ˈprɑːpərti/",
+      "mechanical property": "/məˈkænɪkəl ˈprɑːpərti/",
+      "chemical": "/ˈkemɪkəl/",
+      "composition": "/ˌkɑːmpəˈzɪʃən/",
+      "chemical composition": "/ˈkemɪkəl ˌkɑːmpəˈzɪʃən/",
+      "tensile": "/ˈtensaɪl/",
+      "strength": "/streŋθ/",
+      "tensile strength": "/ˈtensaɪl streŋθ/",
+      "yield": "/jiːld/",
+      "yield strength": "/jiːld streŋθ/",
+      "elongation": "/ˌiːlɔːŋˈɡeɪʃən/",
+      "reduction": "/rɪˈdʌkʃən/",
+      "area": "/ˈeriə/",
+      "reduction of area": "/rɪˈdʌkʃən əv ˈeriə/",
+      "surface": "/ˈsɝːfɪs/",
+      "hardness": "/ˈhɑːrdnəs/",
+      "surface hardness": "/ˈsɝːfɪs ˈhɑːrdnəs/",
+      "as-forged": "/æz fɔːrdʒd/",
+      "controlled": "/kənˈtroʊld/",
+      "cooled": "/kuːld/",
+      "as-forged and controlled cooled": "/æz fɔːrdʒd ənd kənˈtroʊld kuːld/",
+      "specimen": "/ˈspesɪmən/",
+      "tensile specimen": "/ˈtensaɪl ˈspesɪmən/",
+      "microstructural": "/ˌmaɪkroʊˈstrʌktʃərəl/",
+      "microstructural sample": "/ˌmaɪkroʊˈstrʌktʃərəl ˈsæmpl/",
+      "microstructure": "/ˈmaɪkroʊˌstrʌktʃər/",
+      "ferrite": "/ˈferɪt/",
+      "pearlite": "/ˈpɝːlɪt/",
+      "bainite": "/ˈbeɪnaɪt/",
+      "austenite": "/ˈɔːstənaɪt/",
+      "martensite": "/ˈmɑːrtənsaɪt/",
+      "sorbite": "/ˈsɔːrbaɪt/",
+      "grain": "/ɡreɪn/",
+      "grain size": "/ɡreɪn saɪz/",
+
+      // =====================
+      // 其它
+      // =====================
+      "diesel": "/ˈdiːzəl/",
+      "engine": "/ˈendʒɪn/",
+      "diesel engine": "/ˈdiːzəl ˈendʒɪn/",
+      "gasoline": "/ˈɡæsəliːn/",
+      "gasoline engine": "/ˈɡæsəliːn ˈendʒɪn/",
+      "draft": "/dræft/",
+      "angle": "/ˈæŋɡəl/",
+      "draft angle": "/dræft ˈæŋɡəl/",
+      "phase": "/feɪz/",
+      "phase angle": "/feɪz ˈæŋɡəl/",
+      "flywheel": "/ˈflaɪwiːl/",
+      "cylinder": "/ˈsɪlɪndər/",
+      "cylinder block": "/ˈsɪlɪndər blɑːk/",
+      "head": "/hed/",
+      "cylinder head": "/ˈsɪlɪndər hed/",
+      "gear": "/ɡɪr/",
+      "fracture-split": "/ˈfræktʃər splɪt/",
+      "connecting": "/kəˈnektɪŋ/",
+      "rod": "/rɑːd/",
+      "fracture-split connecting rod": "/ˈfræktʃər splɪt kəˈnektɪŋ rɑːd/",
+      "production": "/prəˈdʌkʃən/",
+      "volume": "/ˈvɑːljuːm/",
+      "serial": "/ˈsɪriəl/",
+      "mass production": "/mæs prəˈdʌkʃən/",
+      "volume production": "/ˈvɑːljuːm prəˈdʌkʃən/",
+      "serial production": "/ˈsɪriəl prəˈdʌkʃən/",
+      "internal": "/ɪnˈtɝːnəl/",
+      "combustion": "/kəmˈbʌstʃən/",
+      "internal combustion engine": "/ɪnˈtɝːnəl kəmˈbʌstʃən ˈendʒɪn/",
+      "torque": "/tɔːrk/",
+      "horse": "/hɔːrs/",
+      "power": "/ˈpaʊər/",
+      "horse power": "/hɔːrs ˈpaʊər/",
+      "direction": "/dəˈrekʃən/",
+      "rotation": "/roʊˈteɪʃən/",
+      "direction of rotation": "/dəˈrekʃən əv roʊˈteɪʃən/",
+      "clockwise": "/ˈklɑːkwaɪz/",
+      "counter-clockwise": "/ˌkaʊntər ˈklɑːkwaɪz/",
+      "air": "/er/",
+      "cooling": "/ˈkuːlɪŋ/",
+      "air cooling": "/er ˈkuːlɪŋ/",
+      "water": "/ˈwɔːtər/",
+      "water cooling": "/ˈwɔːtər ˈkuːlɪŋ/",
+      "emission": "/ɪˈmɪʃən/",
+      "exhaust": "/ɪɡˈzɔːst/",
+      "system": "/ˈsɪstəm/",
+      "exhaust system": "/ɪɡˈzɔːst ˈsɪstəm/",
+      "lubricant": "/ˈluːbrɪkənt/",
+      "metal": "/ˈmetəl/",
+      "cutting": "/ˈkʌtɪŋ/",
+      "metal cutting": "/ˈmetəl ˈkʌtɪŋ/",
+      "machine tool": "/məˈʃiːn tuːl/",
+      "technology": "/tekˈnɑːlədʒi/",
+      "metals": "/ˈmetəlz/",
+      "technology of metals": "/tekˈnɑːlədʒi əv ˈmetəlz/",
+      "metal technology": "/ˈmetəl tekˈnɑːlədʒi/",
+      "cutter": "/ˈkʌtər/",
+      "friction": "/ˈfrɪkʃən/",
+      "link": "/lɪŋk/",
+      "drive": "/draɪv/",
+      "transmission": "/trænzˈmɪʃən/",
+      "elasticity": "/ˌiːlæˈstɪsəti/",
+      "frequency": "/ˈfriːkwənsi/",
+      "frequency characteristic": "/ˈfriːkwənsi ˌkerəktəˈrɪstɪk/",
+      "error": "/ˈerər/",
+      "response": "/rɪˈspɑːns/",
+      "positioning": "/pəˈzɪʃənɪŋ/",
+      "jig": "/dʒɪɡ/",
+      "kinematic": "/ˌkɪnəˈmætɪk/",
+      "static": "/ˈstætɪk/",
+      "analytical": "/ˌænəˈlɪtɪkəl/",
+      "mechanics": "/məˈkænɪks/",
+      "analytical mechanics": "/ˌænəˈlɪtɪkəl məˈkænɪks/",
+      "pulling": "/ˈpʊlɪŋ/",
+      "hitting": "/ˈhɪtɪŋ/",
+      "shear": "/ʃɪr/",
+      "twist": "/twɪst/",
+      "torsion": "/ˈtɔːrʃən/",
+      "bending": "/ˈbendɪŋ/",
+      "bending stress": "/ˈbendɪŋ stres/",
+      "intensity": "/ɪnˈtensəti/",
+      "geometrical": "/ˌdʒiːəˈmetrɪkəl/",
+      "precision": "/prɪˈsɪʒən/",
+      "sinusoid": "/ˈsaɪnəsɔɪd/",
+      "allowance": "/əˈlaʊəns/",
+      "machining allowance": "/məˈʃiːnɪŋ əˈlaʊəns/",
+      "deforming": "/dɪˈfɔːrmɪŋ/",
+      "force": "/fɔːrs/",
+      "deforming force": "/dɪˈfɔːrmɪŋ fɔːrs/",
+      "deformation": "/ˌdiːfɔːrˈmeɪʃən/",
+      "rigidity": "/rɪˈdʒɪdəti/",
+      "decarburization": "/ˌdiːˌkɑːrbərəˈzeɪʃən/",
+      "carburization": "/ˌkɑːrbərəˈzeɪʃən/",
+      "external": "/ɪkˈstɝːnəl/",
+      "external grinding": "/ɪkˈstɝːnəl ˈɡraɪndɪŋ/",
+      "internal grinding": "/ɪnˈtɝːnəl ˈɡraɪndɪŋ/",
+      "plane": "/pleɪn/",
+      "plane grinding": "/pleɪn ˈɡraɪndɪŋ/",
+      "gearbox": "/ˈɡɪrbɑːks/",
+      "clutch": "/klʌtʃ/",
+      "fraising": "/ˈfreɪzɪŋ/",
+      "reaming": "/ˈriːmɪŋ/",
+      "reamer": "/ˈriːmər/",
+      "thread": "/θred/",
+      "processing": "/ˈprɑːsesɪŋ/",
+      "thread processing": "/θred ˈprɑːsesɪŋ/",
+      "milling cutter": "/ˈmɪlɪŋ ˈkʌtər/",
+      "workpiece": "/ˈwɝːrkpiːs/",
+      "gear machining": "/ɡɪr məˈʃiːnɪŋ/",
+      "movement": "/ˈmuːvmənt/",
+      "main movement": "/meɪn ˈmuːvmənt/",
+      "cutting depth": "/ˈkʌtɪŋ depθ/",
+      "machining center": "/məˈʃiːnɪŋ ˈsentər/",
+      "lathe tool": "/leɪð tuːl/",
+      "bore": "/bɔːr/",
+      "grinder": "/ˈɡraɪndər/",
+      "locksmith": "/ˈlɑːksmɪθ/",
+      "forge": "/fɔːrdʒ/",
+      "stamping": "/ˈstæmpɪŋ/",
+      "weld": "/weld/",
+      "broaching machine": "/ˈbroʊtʃɪŋ məˈʃiːn/",
+      "assembling": "/əˈsemblɪŋ/",
+      "found": "/faʊnd/",
+      "casting": "/ˈkæstɪŋ/",
+      "foundry": "/ˈfaʊndri/",
+      "fluid": "/ˈfluːɪd/",
+      "dynamics": "/daɪˈnæmɪks/",
+      "fluid dynamics": "/ˈfluːɪd daɪˈnæmɪks/",
+      "fluid mechanics": "/ˈfluːɪd məˈkænɪks/",
+      "tangent": "/ˈtændʒənt/",
+      "pressure": "/ˈpreʃər/",
+      "air pressure": "/er ˈpreʃər/",
+      "pneumatic": "/nʊˈmætɪk/",
+      "pneumatic pressure": "/nʊˈmætɪk ˈpreʃər/",
+      "stability": "/stəˈbɪləti/",
+      "medium": "/ˈmiːdiəm/",
+      "invalidation": "/ɪnˌvælɪˈdeɪʃən/",
+      "load": "/loʊd/",
+      "safety": "/ˈseɪfti/",
+      "factor": "/ˈfæktər/",
+      "safety factor": "/ˈseɪfti ˈfæktər/",
+      "reliability": "/rɪˌlaɪəˈbɪləti/",
+      "helix": "/ˈhiːlɪks/",
+      "key": "/kiː/",
+      "rolling bearing": "/ˈroʊlɪŋ ˈberɪŋ/",
+      "sliding": "/ˈslaɪdɪŋ/",
+      "sliding bearing": "/ˈslaɪdɪŋ ˈberɪŋ/",
+      "spring": "/sprɪŋ/",
+      "arrester": "/əˈrestər/",
+      "brake": "/breɪk/",
+      "arrester brake": "/əˈrestər breɪk/",
+      "strap": "/stræp/",
+      "rust": "/rʌst/",
+      "oxidation": "/ˌɑːksəˈdeɪʃən/",
+      "wear": "/wer/",
+      "durability": "/ˌdʊrəˈbɪləti/",
+      "residual stress": "/rɪˈzɪdʒuəl stres/",
+      "cold": "/koʊld/",
+      "cold machining": "/koʊld məˈʃiːnɪŋ/",
+      "electromotor": "/ɪˌlektroʊˈmoʊtər/",
+      "interference": "/ˌɪntərˈfɪrəns/",
+      "fit": "/fɪt/",
+      "interference fit": "/ˌɪntərˈfɪrəns fɪt/",
+      "hotwork": "/ˈhɑːtwɝːrk/",
+      "camera": "/ˈkæmərə/",
+      "rounding": "/ˈraʊndɪŋ/",
+      "rounding chamfer": "/ˈraʊndɪŋ ˈtʃæmfər/",
+      "optimal": "/ˈɑːptɪməl/",
+      "design": "/dɪˈzaɪn/",
+      "optimal design": "/ˈɑːptɪməl dɪˈzaɪn/",
+      "finite": "/ˈfaɪnaɪt/",
+      "element": "/ˈelɪmənt/",
+      "finite element": "/ˈfaɪnaɪt ˈelɪmənt/",
+      "hobbing": "/ˈhɑːbɪŋ/",
+      "shaping": "/ˈʃeɪpɪŋ/",
+      "gear shaping": "/ɡɪr ˈʃeɪpɪŋ/",
+      "actuating": "/ˈæktʃueɪtɪŋ/",
+      "motor": "/ˈmoʊtər/",
+      "actuating motor": "/ˈæktʃueɪtɪŋ ˈmoʊtər/",
+      "servo": "/ˈsɝːvoʊ/",
+      "servo motor": "/ˈsɝːvoʊ ˈmoʊtər/",
+      "milling machine": "/ˈmɪlɪŋ məˈʃiːn/",
+      "drill": "/drɪl/",
+      "drill machine": "/drɪl məˈʃiːn/",
+      "drilling machine": "/ˈdrɪlɪŋ məˈʃiːn/",
+      "boring machine": "/ˈbɔːrɪŋ məˈʃiːn/",
+      "electric": "/ɪˈlektrɪk/",
+      "spark": "/spɑːrk/",
+      "electric spark machining": "/ɪˈlektrɪk spɑːrk məˈʃiːnɪŋ/",
+      "electrical": "/ɪˈlektrɪkəl/",
+      "discharge": "/dɪsˈtʃɑːrdʒ/",
+      "wire": "/ˈwaɪər/",
+      "electrical discharge wire cutting": "/ɪˈlektrɪkəl dɪsˈtʃɑːrdʒ ˈwaɪər ˈkʌtɪŋ/",
+      "diagram": "/ˈdaɪəɡræm/",
+      "phase diagram": "/feɪz ˈdaɪəɡræm/",
+      "solid": "/ˈsɑːlɪd/",
+      "state": "/steɪt/",
+      "changes": "/ˈtʃeɪndʒɪz/",
+      "solid state phase changes": "/ˈsɑːlɪd steɪt feɪz ˈtʃeɪndʒɪz/",
+      "nonferrous": "/ˌnɑːnˈferəs/",
+      "nonferrous metal": "/ˌnɑːnˈferəs ˈmetəl/",
+      "electrochemical": "/ɪˌlektroʊˈkemɪkəl/",
+      "electrochemical corrosion": "/ɪˌlektroʊˈkemɪkəl kəˈroʊʒən/",
+      "sheet": "/ʃiːt/",
+      "parts": "/pɑːrts/",
+      "sheet metal parts": "/ʃiːt ˈmetəl pɑːrts/",
+      "spot": "/spɑːt/",
+      "facing": "/ˈfeɪsɪŋ/",
+      "spot facing machining": "/spɑːt ˈfeɪsɪŋ məˈʃiːnɪŋ/",
+      "hole machining": "/hoʊl məˈʃiːnɪŋ/",
+      "workshop": "/ˈwɝːrkʃɑːp/",
+      "engineer": "/ˌendʒɪˈnɪr/",
+      "mechanical drawing": "/məˈkænɪkəl ˈdrɔːɪŋ/",
+      "projection": "/prəˈdʒekʃən/",
+      "profile": "/ˈproʊfaɪl/",
+      "chart": "/tʃɑːrt/",
+      "profile chart": "/ˈproʊfaɪl tʃɑːrt/",
+      "section view": "/ˈsekʃən vjuː/",
+      "standard component": "/ˈstændərd kəmˈpoʊnənt/",
+      "master piece": "/ˈmæstər piːs/",
+      "master sample": "/ˈmæstər ˈsæmpl/",
+      "part drawing": "/pɑːrt ˈdrɔːɪŋ/",
+      "assembly drawing": "/əˈsembli ˈdrɔːɪŋ/",
+      "size marking": "/saɪz ˈmɑːrkɪŋ/",
+      "technical requirements": "/ˈteknɪkəl rɪˈkwaɪərmənts/",
+      "internal force": "/ɪnˈtɝːnəl fɔːrs/",
+      "displacement": "/dɪsˈpleɪsmənt/",
+      "fatigue": "/fəˈtiːɡ/",
+      "limit": "/ˈlɪmɪt/",
+      "fatigue limit": "/fəˈtiːɡ ˈlɪmɪt/",
+      "fracture": "/ˈfræktʃər/",
+      "crack": "/kræk/",
+      "plastic": "/ˈplæstɪk/",
+      "distortion": "/dɪˈstɔːrʃən/",
+      "plastic distortion": "/ˈplæstɪk dɪˈstɔːrʃən/",
+      "plastic deformation": "/ˈplæstɪk ˌdiːfɔːrˈmeɪʃən/",
+      "brittleness": "/ˈbrɪtəlnəs/",
+      "material": "/məˈtɪriəl/",
+      "brittleness material": "/ˈbrɪtəlnəs məˈtɪriəl/",
+      "rigidity criterion": "/rɪˈdʒɪdəti kraɪˈtɪriən/",
+      "washer": "/ˈwɑːʃər/",
+      "spacer": "/ˈspeɪsər/",
+      "passive": "/ˈpæsɪv/",
+      "constraint": "/kənˈstreɪnt/",
+      "passive constraint": "/ˈpæsɪv kənˈstreɪnt/",
+      "rocker": "/ˈrɑːkər/",
+      "cams": "/kæmz/",
+      "slide": "/slaɪd/",
+      "caliper": "/ˈkælɪpər/",
+      "slide caliper": "/slaɪd ˈkælɪpər/",
+      "vernier": "/ˈvɝːniər/",
+      "vernier caliper": "/ˈvɝːniər ˈkælɪpər/",
+      "micrometer": "/maɪˈkrɑːmɪtər/",
+      "calipers": "/ˈkælɪpərz/",
+      "micrometer calipers": "/maɪˈkrɑːmɪtər ˈkælɪpərz/",
+      "probability": "/ˌprɑːbəˈbɪləti/",
+      "random": "/ˈrændəm/",
+      "variable": "/ˈveriəbl/",
+      "random variable": "/ˈrændəm ˈveriəbl/",
+      "permutation": "/ˌpɝːmjəˈteɪʃən/",
+      "combination": "/ˌkɑːmbɪˈneɪʃən/",
+      "permutation and combination": "/ˌpɝːmjəˈteɪʃən ənd ˌkɑːmbɪˈneɪʃən/",
+      "mechanical parts": "/məˈkænɪkəl pɑːrts/",
+      "grinding wheel": "/ˈɡraɪndɪŋ wiːl/"
+    };
+
+    const CATEGORY_ORDER = [
+      "结构名称",
+      "加工工艺",
+      "形位公差",
+      "探伤",
+      "热处理",
+      "其它",
+      "通用之件类"
+    ];
+
+    const bank = {};
+
+    const selectEl = document.getElementById("categorySelect");
+    const startBtn = document.getElementById("startBtn");
+    const endBtn = document.getElementById("endBtn");
+    const timerEl = document.getElementById("timer");
+    const chineseWordEl = document.getElementById("chineseWord");
+    const inputAreaEl = document.getElementById("inputArea");
+    const progressEl = document.getElementById("progress");
+    const summaryOverlay = document.getElementById("summaryOverlay");
+    const summaryStats = document.getElementById("summaryStats");
+    const errorReport = document.getElementById("errorReport");
+    const closeSummaryBtn = document.getElementById("closeSummaryBtn");
+
+    const speakBtn = document.getElementById("speakBtn");
+    const phoneticText = document.getElementById("phoneticText");
+
+    let running = false;
+    let timerInterval = null;
+    let seconds = 0;
+
+    let currentCategory = "";
+    let categoryData = [];
+    let currentIndex = -1;
+
+    let currentItemVariants = [];
+    let typedWords = [];
+    let currentWordIndex = 0;
+
+    let results = [];
+    let totalScore = 0;
+    let totalPossibleWords = 0;
+
+    const phoneticCache = new Map();
+    let phoneticRequestId = 0;
+
+    // =====================
+    // 音标与发音工具
+    // =====================
+
+    function normalizePhoneticKey(text) {
+      return String(text || "")
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function getLocalPhonetic(text) {
+      const key = normalizePhoneticKey(text);
+
+      if (!key) return "";
+
+      // 1. 优先完整词条
+      if (LOCAL_PHONETICS[key]) {
+        return LOCAL_PHONETICS[key];
+      }
+
+      // 2. 如果是词组，且每个单词都有本地音标，则拼接
+      const words = key.split(/\s+/).filter(Boolean);
+
+      if (words.length > 1) {
+        const parts = [];
+
+        for (const word of words) {
+          const wordPhonetic = LOCAL_PHONETICS[word];
+
+          if (!wordPhonetic) {
+            return "";
+          }
+
+          parts.push(wordPhonetic);
+        }
+
+        if (parts.length === words.length) {
+          return parts.join(" ");
+        }
+      }
+
+      return "";
+    }
+
+    function prepareSpeechText(text) {
+      const raw = String(text || "").trim();
+
+      if (!raw) return "";
+
+      const tokens = raw.split(/\s+/).filter(Boolean);
+
+      const spokenTokens = tokens.map(token => {
+        const lettersOnly = token.replace(/[^A-Za-z]/g, "");
+
+        // 2~6 个纯大写字母，按字母朗读，例如 ECN -> E C N
+        if (/^[A-Z]{2,6}$/.test(lettersOnly)) {
+          return lettersOnly.split("").join(" ");
+        }
+
+        // 单个大写字母，例如 V
+        if (/^[A-Z]$/.test(lettersOnly)) {
+          return lettersOnly;
+        }
+
+        return token;
+      });
+
+      return spokenTokens.join(" ");
+    }
+
+    function speakWord(text) {
+      if (!text || !("speechSynthesis" in window)) return;
+
+      window.speechSynthesis.cancel();
+
+      const speechText = prepareSpeechText(text);
+
+      const utterance = new SpeechSynthesisUtterance(speechText || text);
+      utterance.lang = "en-US";
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    async function getOnlinePhoneticForWord(word) {
+      try {
+        const cleanWord = String(word || "").trim();
+
+        if (!cleanWord) return "";
+
+        const response = await fetch(
+          `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanWord.toLowerCase())}`
+        );
+
+        if (!response.ok) return "";
+
+        const data = await response.json();
+
+        const entry = Array.isArray(data) ? data[0] : null;
+
+        if (!entry || !Array.isArray(entry.phonetics)) return "";
+
+        // 优先找带美式音频的音标
+        const usPhonetic = entry.phonetics.find(
+          item => item.text && item.audio && item.audio.includes("-us")
+        );
+
+        if (usPhonetic && usPhonetic.text) {
+          return usPhonetic.text;
+        }
+
+        // 其次找标准 /.../ 格式音标
+        const slashPhonetic = entry.phonetics.find(
+          item => item.text && item.text.startsWith("/")
+        );
+
+        if (slashPhonetic && slashPhonetic.text) {
+          return slashPhonetic.text;
+        }
+
+        // 最后兜底
+        const anyPhonetic = entry.phonetics.find(item => item.text);
+
+        if (anyPhonetic && anyPhonetic.text) {
+          return anyPhonetic.text;
+        }
+
+        return "";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    async function fetchPhonetic(text) {
+      const requestId = ++phoneticRequestId;
+
+      if (!text) {
+        phoneticText.textContent = "";
+        return;
+      }
+
+      // 1. 本地音标优先
+      const localPhonetic = getLocalPhonetic(text);
+
+      if (localPhonetic) {
+        phoneticText.textContent = localPhonetic;
+        phoneticText.style.color = "#0f766e";
+        return;
+      }
+
+      phoneticText.textContent = "尝试获取音标中...";
+      phoneticText.style.color = "#94a3b8";
+
+      try {
+        const words = String(text).split(/\s+/).filter(Boolean);
+
+        const promises = words.map(async word => {
+          const cacheKey = normalizePhoneticKey(word);
+
+          if (phoneticCache.has(cacheKey)) {
+            return phoneticCache.get(cacheKey);
+          }
+
+          const onlinePhonetic = await getOnlinePhoneticForWord(word);
+          phoneticCache.set(cacheKey, onlinePhonetic);
+
+          return onlinePhonetic;
+        });
+
+        const phonetics = await Promise.all(promises);
+
+        if (requestId !== phoneticRequestId) return;
+
+        const allSuccess = phonetics.length > 0 && phonetics.every(Boolean);
+
+        if (allSuccess) {
+          phoneticText.textContent = phonetics.join(" ") + "（自动音标，仅供参考）";
+          phoneticText.style.color = "#475569";
+        } else {
+          phoneticText.textContent = "（暂无可靠音标）";
+          phoneticText.style.color = "#94a3b8";
+        }
+      } catch (error) {
+        if (requestId === phoneticRequestId) {
+          console.error("获取音标失败:", error);
+          phoneticText.textContent = "（音标获取失败）";
+          phoneticText.style.color = "#ef4444";
+        }
+      }
+    }
+
+    speakBtn.addEventListener("click", () => {
+      if (!running || currentIndex < 0 || currentIndex >= categoryData.length) return;
+
+      const targetText = currentItemVariants[0] || "";
+
+      if (targetText) {
+        speakWord(targetText);
+        fetchPhonetic(targetText);
+      }
+    });
+
+    // =====================
+    // 原有词库与练习逻辑
+    // =====================
+
+    function initBank() {
+      const raw = document.getElementById("raw-data").textContent || "";
+      const lines = raw.split(/\r?\n/);
+      let current = null;
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+        if (!line) continue;
+
+        const heading = line.match(/^([一二三四五六七八九十]+)\s*[、．.]\s*(.+)$/);
+        if (heading) {
+          current = heading[2].trim();
+          if (!bank[current]) bank[current] = [];
+          continue;
+        }
+
+        if (!current || !CATEGORY_ORDER.includes(current)) continue;
+
+        const m = line.match(/^(.*?)[：:](.*)$/);
+        if (m) {
+          const zh = m[1].trim();
+          const en = m[2].trim();
+          if (zh && en) {
+            bank[current].push([zh, en]);
+          }
+        }
+      }
+
+      if (!bank["通用之件类"]) bank["通用之件类"] = [];
+
+      const commonParts = [
+        ["工程变更通知(供应商)", "ECN"],
+        ["工程改动要求(客户)", "ECO"],
+        ["工序改动通知", "PCN"],
+        ["制造作业规范", "SOP"],
+        ["物料清单", "BOM"],
+        ["包装规范", "PS"],
+        ["规格", "SPEC"],
+        ["图纸", "DWG"]
+      ];
+
+      commonParts.forEach(item => {
+        const exists = bank["通用之件类"].some(x => x[0] === item[0]);
+        if (!exists) bank["通用之件类"].push(item);
+      });
+    }
+
+    function populateSelect() {
+      selectEl.innerHTML = '<option value="">请选择</option>';
+      CATEGORY_ORDER.forEach(cat => {
+        if (bank[cat] && bank[cat].length) {
+          const opt = document.createElement("option");
+          opt.value = cat;
+          opt.textContent = cat;
+          selectEl.appendChild(opt);
+        }
+      });
+    }
+
+    function cleanVariant(s) {
+      return String(s || "")
+        .trim()
+        .replace(/[－—–]/g, " ")
+        .replace(/\s+-\s+/g, " ")
+        .replace(/\s+/g, " ")
+        .replace(/^[\s.,;:]+|[\s.,;:]+$/g, "")
+        .trim();
+    }
+
+    function parseVariants(en) {
+      if (!en) return [];
+      let s = String(en)
+        .replace(/\s+或\s+/g, " / ")
+        .replace(/[；;]/g, "/");
+
+      const parts = s
+        .split("/")
+        .map(cleanVariant)
+        .filter(Boolean);
+
+      return [...new Set(parts.length ? parts : [cleanVariant(en)])];
+    }
+
+    function normalizeForCompare(s) {
+      return String(s || "")
+        .toLowerCase()
+        .replace(/[－—–]/g, "-")
+        .replace(/\s+-\s+/g, " ")
+        .replace(/[^a-z0-9\s&-]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function levenshtein(a, b) {
+      a = String(a || "").toLowerCase();
+      b = String(b || "").toLowerCase();
+
+      const m = a.length;
+      const n = b.length;
+
+      if (!m) return n;
+      if (!n) return m;
+
+      const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+      for (let i = 0; i <= m; i++) dp[i][0] = i;
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + cost
+          );
+        }
+      }
+
+      return dp[m][n];
+    }
+
+    function getBestVariant(variants, typed) {
+      if (!variants.length) return { variant: "", words: [] };
+
+      if (typed.every(w => !w)) {
+        const v = variants[0] || "";
+        return { variant: v, words: v.split(/\s+/).filter(Boolean) };
+      }
+
+      let best = variants[0];
+      let bestScore = Infinity;
+
+      for (const v of variants) {
+        const words = v.split(/\s+/).filter(Boolean);
+        let score = Math.abs(words.length - typed.length) * 3;
+
+        for (let i = 0; i < typed.length; i++) {
+          score += levenshtein(typed[i] || "", words[i] || "");
+        }
+
+        if (score < bestScore) {
+          bestScore = score;
+          best = v;
+        }
+      }
+
+      return { variant: best, words: best.split(/\s+/).filter(Boolean) };
+    }
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function updateTimerDisplay() {
+      timerEl.textContent = formatTime(seconds);
+    }
+
+    function startTimer() {
+      stopTimer();
+      seconds = 0;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        seconds++;
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startPractice() {
+      const cat = selectEl.value;
+      if (!cat || !bank[cat] || !bank[cat].length) return;
+
+      currentCategory = cat;
+      categoryData = shuffle(bank[cat]);
+      currentIndex = 0;
+
+      results = [];
+      totalScore = 0;
+      totalPossibleWords = 0;
+
+      running = true;
+      selectEl.disabled = true;
+      startBtn.disabled = true;
+      endBtn.disabled = false;
+      speakBtn.disabled = false;
+
+      startTimer();
+      renderCurrent();
+      startBtn.blur();
+      selectEl.blur();
+    }
+
+    function renderCurrent() {
+      if (!categoryData.length || currentIndex >= categoryData.length) return;
+
+      const item = categoryData[currentIndex];
+      chineseWordEl.textContent = item[0];
+      progressEl.textContent = `第 ${currentIndex + 1} / ${categoryData.length} 题`;
+
+      // 切题时取消旧请求和旧发音
+      phoneticRequestId++;
+      phoneticText.textContent = "";
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      currentItemVariants = parseVariants(item[1]);
+      const firstWords = (currentItemVariants[0] || "").split(/\s+/).filter(Boolean);
+      const slotCount = Math.max(1, firstWords.length);
+
+      typedWords = Array(slotCount).fill("");
+      currentWordIndex = 0;
+
+      renderInput();
+    }
+
+    function renderInput() {
+      inputAreaEl.innerHTML = "";
+
+      const best = getBestVariant(currentItemVariants, typedWords);
+
+      for (let i = 0; i < typedWords.length; i++) {
+        const slot = document.createElement("div");
+        slot.className = "word-slot" + (i === currentWordIndex ? " active" : "");
+
+        const targetWord = best.words[i] || "";
+        slot.style.minWidth = Math.max(4, targetWord.length + 2) + "ch";
+
+        const typed = typedWords[i] || "";
+
+        if (!typed) {
+          const ph = document.createElement("span");
+          ph.className = "placeholder";
+          ph.textContent = "_".repeat(Math.max(3, targetWord.length || 3));
+          slot.appendChild(ph);
+        } else {
+          for (let j = 0; j < typed.length; j++) {
+            const span = document.createElement("span");
+            span.textContent = typed[j];
+
+            const targetChar = (targetWord[j] || "").toLowerCase();
+            if (targetChar && typed[j].toLowerCase() === targetChar) {
+              span.className = "ok";
+            } else {
+              span.className = "bad";
+            }
+
+            slot.appendChild(span);
+          }
+
+          if (targetWord.length > typed.length) {
+            const rem = document.createElement("span");
+            rem.className = "placeholder";
+            rem.textContent = "_".repeat(targetWord.length - typed.length);
+            slot.appendChild(rem);
+          }
+        }
+
+        inputAreaEl.appendChild(slot);
+      }
+    }
+
+    function evaluateCurrent() {
+      const item = categoryData[currentIndex];
+      const variants = currentItemVariants.length ? currentItemVariants : parseVariants(item[1]);
+
+      const typedPhrase = typedWords
+        .map(w => w.trim())
+        .filter(Boolean)
+        .join(" ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      const normalizedUser = normalizeForCompare(typedPhrase);
+
+      let matchedVariant = null;
+      for (const v of variants) {
+        if (normalizedUser && normalizeForCompare(v) === normalizedUser) {
+          matchedVariant = v;
+          break;
+        }
+      }
+
+      const best = getBestVariant(variants, typedWords);
+
+      let correctWords = [];
+      let possibleWords = 0;
+      let gained = 0;
+      let wordChecks = [];
+
+      if (matchedVariant) {
+        correctWords = matchedVariant.split(/\s+/).filter(Boolean);
+        possibleWords = correctWords.length;
+        gained = possibleWords * 10;
+        wordChecks = correctWords.map(() => true);
+      } else {
+        correctWords = best.words.length ? best.words : [""];
+        possibleWords = correctWords.length;
+        wordChecks = correctWords.map(
+          (w, i) => normalizeForCompare(typedWords[i] || "") === normalizeForCompare(w)
+        );
+        gained = wordChecks.filter(Boolean).length * 10;
+      }
+
+      return {
+        zh: item[0],
+        user: typedPhrase || "(未输入)",
+        correct: variants.join(" / "),
+        correctWords,
+        possibleWords,
+        gained,
+        wordChecks
+      };
+    }
+
+    function submitCurrent() {
+      if (!running || currentIndex < 0 || currentIndex >= categoryData.length) return;
+
+      const evaluation = evaluateCurrent();
+      results.push(evaluation);
+      totalScore += evaluation.gained;
+      totalPossibleWords += evaluation.possibleWords;
+
+      currentIndex++;
+
+      if (currentIndex >= categoryData.length) {
+        finishPractice();
+      } else {
+        renderCurrent();
+      }
+    }
+
+    function endPractice() {
+      if (!running) return;
+
+      if (currentIndex >= 0 && currentIndex < categoryData.length) {
+        const evaluation = evaluateCurrent();
+        results.push(evaluation);
+        totalScore += evaluation.gained;
+        totalPossibleWords += evaluation.possibleWords;
+      }
+
+      finishPractice();
+    }
+
+    function finishPractice() {
+      running = false;
+      stopTimer();
+      endBtn.disabled = true;
+      speakBtn.disabled = true;
+
+      phoneticRequestId++;
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      showSummary();
+    }
+
+    function showSummary() {
+      const correctItems = results.filter(r => r.gained === r.possibleWords * 10).length;
+      const correctWords = Math.round(totalScore / 10);
+
+      summaryStats.innerHTML = `
+        <div><strong>练习大类：</strong>${escapeHtml(currentCategory)}</div>
+        <div><strong>用时：</strong>${formatTime(seconds)}</div>
+        <div><strong>总分：</strong>${totalScore} / ${totalPossibleWords * 10}</div>
+        <div><strong>答对单词数：</strong>${correctWords} / ${totalPossibleWords}</div>
+        <div><strong>完全答对词条数：</strong>${correctItems} / ${results.length}</div>
+      `;
+
+      errorReport.innerHTML = "";
+
+      const wrongResults = results.filter(r => r.gained < r.possibleWords * 10);
+
+      if (!wrongResults.length) {
+        errorReport.innerHTML = "<p style='color:#16a34a;font-weight:bold;'>全部正确，太棒了！</p>";
+      } else {
+        wrongResults.forEach(r => {
+          const box = document.createElement("div");
+          box.className = "wrong-item";
+
+          const zh = document.createElement("div");
+          zh.className = "zh";
+          zh.textContent = r.zh;
+
+          const userLine = document.createElement("div");
+          const userLabel = document.createElement("span");
+          userLabel.className = "line-label";
+          userLabel.textContent = "你的输入：";
+          userLine.appendChild(userLabel);
+
+          if (r.user === "(未输入)") {
+            const span = document.createElement("span");
+            span.className = "missed-word";
+            span.textContent = "(未输入)";
+            userLine.appendChild(span);
+          } else {
+            const userWords = r.user.split(/\s+/).filter(Boolean);
+            const maxLen = Math.max(userWords.length, r.correctWords.length);
+
+            for (let i = 0; i < maxLen; i++) {
+              const span = document.createElement("span");
+
+              if (i < userWords.length) {
+                span.textContent = userWords[i];
+                span.className = r.wordChecks[i] ? "correct-word" : "wrong-word";
+              } else {
+                span.textContent = "___";
+                span.className = "missed-word";
+              }
+
+              userLine.appendChild(span);
+            }
+          }
+
+          const correctLine = document.createElement("div");
+          const correctLabel = document.createElement("span");
+          correctLabel.className = "line-label";
+          correctLabel.textContent = "正确答案：";
+          correctLine.appendChild(correctLabel);
+
+          r.correctWords.forEach(w => {
+            const span = document.createElement("span");
+            span.className = "correct-word";
+            span.textContent = w;
+            correctLine.appendChild(span);
+          });
+
+          const allLine = document.createElement("div");
+          allLine.className = "all-answer";
+          allLine.textContent = "可接受答案：" + r.correct;
+
+          box.appendChild(zh);
+          box.appendChild(userLine);
+          box.appendChild(correctLine);
+          box.appendChild(allLine);
+
+          errorReport.appendChild(box);
+        });
+      }
+
+      summaryOverlay.hidden = false;
+    }
+
+    function closeSummary() {
+      summaryOverlay.hidden = true;
+
+      selectEl.disabled = false;
+      selectEl.value = "";
+      startBtn.disabled = true;
+      endBtn.disabled = true;
+      speakBtn.disabled = true;
+
+      running = false;
+      currentIndex = -1;
+      categoryData = [];
+      results = [];
+      totalScore = 0;
+      totalPossibleWords = 0;
+
+      seconds = 0;
+      updateTimerDisplay();
+
+      chineseWordEl.textContent = "请选择大类，然后点击“开始练习”";
+      inputAreaEl.innerHTML = "";
+      progressEl.textContent = "";
+      phoneticText.textContent = "";
+
+      phoneticRequestId++;
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function handleKeyDown(e) {
+      if (!running) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitCurrent();
+        return;
+      }
+
+      if (e.key === "Backspace") {
+        e.preventDefault();
+
+        if (typedWords[currentWordIndex].length > 0) {
+          typedWords[currentWordIndex] = typedWords[currentWordIndex].slice(0, -1);
+        } else if (currentWordIndex > 0) {
+          currentWordIndex--;
+        }
+
+        renderInput();
+        return;
+      }
+
+      if (e.key === " ") {
+        e.preventDefault();
+
+        if (currentWordIndex < typedWords.length - 1) {
+          currentWordIndex++;
+        }
+
+        renderInput();
+        return;
+      }
+
+      if (e.key.length === 1 && /^[a-zA-Z0-9&\-']$/.test(e.key)) {
+        e.preventDefault();
+
+        typedWords[currentWordIndex] += e.key.toLowerCase();
+
+        const best = getBestVariant(currentItemVariants, typedWords);
+        const targetWord = best.words[currentWordIndex] || "";
+
+        if (
+          targetWord &&
+          typedWords[currentWordIndex].length >= targetWord.length &&
+          currentWordIndex < typedWords.length - 1
+        ) {
+          currentWordIndex++;
+        }
+
+        renderInput();
+      }
+    }
+
+    selectEl.addEventListener("change", () => {
+      if (selectEl.value) {
+        startBtn.disabled = false;
+        chineseWordEl.textContent = `已选择：${selectEl.value}，请点击“开始练习”`;
+        inputAreaEl.innerHTML = "";
+        progressEl.textContent = "";
+        phoneticText.textContent = "";
+        seconds = 0;
+        updateTimerDisplay();
+      } else {
+        startBtn.disabled = true;
+        chineseWordEl.textContent = "请选择大类，然后点击“开始练习”";
+        inputAreaEl.innerHTML = "";
+        progressEl.textContent = "";
+        phoneticText.textContent = "";
+      }
+    });
+
+    startBtn.addEventListener("click", startPractice);
+    endBtn.addEventListener("click", endPractice);
+    closeSummaryBtn.addEventListener("click", closeSummary);
+    document.addEventListener("keydown", handleKeyDown);
+
+    initBank();
+    populateSelect();
+  </script>
+</body>
+</html>
