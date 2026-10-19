@@ -2,441 +2,177 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <!-- 关键：viewport 加上 maximum-scale=1.0, user-scalable=no 避免 iOS 输入时自动放大 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>专业术语英语打字练习 · iOS 适配版</title>
   <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
       font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
       background: linear-gradient(135deg, #eef4ff, #f8fbff);
-      /* 禁止 iOS 文本选中/长按菜单，避免干扰 */
-      -webkit-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-      -webkit-text-size-adjust: 100%;
+      -webkit-user-select: none; user-select: none;
+      -webkit-touch-callout: none; -webkit-text-size-adjust: 100%;
     }
 
-    [hidden] {
-      display: none !important;
-    }
+    [hidden] { display: none !important; }
 
-    /* ===== 顶部工具栏（移动端友好） ===== */
     #topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 30;
-      background: rgba(255, 255, 255, 0.97);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 10px 12px;
-      padding-top: calc(10px + env(safe-area-inset-top));
+      position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      padding: 10px 12px; padding-top: calc(10px + env(safe-area-inset-top));
       border-radius: 0 0 16px 16px;
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.10);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      box-shadow: 0 6px 20px rgba(15,23,42,0.10);
+      display: flex; flex-direction: column; gap: 8px;
     }
 
-    .top-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    .top-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-    label {
-      font-weight: bold;
-      font-size: 14px;
-      color: #1e293b;
-      flex-shrink: 0;
-    }
+    label { font-weight: bold; font-size: 14px; color: #1e293b; flex-shrink: 0; }
 
     select, button {
-      font-size: 15px;
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
-      padding: 8px 10px;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      background: #fff;
-      color: #0f172a;
-      min-height: 40px;
+      font-size: 15px; border-radius: 10px; border: 1px solid #cbd5e1;
+      padding: 8px 10px; outline: none; -webkit-appearance: none; appearance: none;
+      background: #fff; color: #0f172a; min-height: 40px;
     }
 
     select {
-      flex: 1;
-      min-width: 120px;
+      flex: 1; min-width: 120px;
       background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23334155%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      background-size: 12px;
-      padding-right: 30px;
+      background-repeat: no-repeat; background-position: right 10px center;
+      background-size: 12px; padding-right: 30px;
     }
 
     #startBtn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      flex-shrink: 0;
-      padding-left: 16px;
-      padding-right: 16px;
+      background: #2563eb; color: white; border: none; cursor: pointer;
+      font-weight: bold; flex-shrink: 0; padding-left: 16px; padding-right: 16px;
     }
-
-    #startBtn:disabled {
-      background: #93c5fd;
-      cursor: not-allowed;
-    }
+    #startBtn:disabled { background: #93c5fd; cursor: not-allowed; }
 
     #timer {
-      font-size: 17px;
-      font-weight: bold;
-      color: #0f172a;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 6px 14px;
-      min-width: 80px;
-      text-align: center;
-      font-variant-numeric: tabular-nums;
+      font-size: 17px; font-weight: bold; color: #0f172a; background: #f1f5f9;
+      border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px 14px;
+      min-width: 80px; text-align: center; font-variant-numeric: tabular-nums;
     }
 
-    /* ===== 主区域（移动端全面重新布局） ===== */
     #mainArea {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 16px;
-      padding-top: calc(112px + env(safe-area-inset-top));
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      padding: 16px; padding-top: calc(112px + env(safe-area-inset-top));
       padding-bottom: calc(16px + env(safe-area-inset-bottom));
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      transition: padding-bottom 0.2s ease;
     }
 
-    #progress {
-      font-size: 15px;
-      color: #475569;
-      margin-bottom: 12px;
-      min-height: 20px;
-      flex-shrink: 0;
-    }
+    #progress { font-size: 15px; color: #475569; margin-bottom: 12px; min-height: 20px; flex-shrink: 0; }
 
     #chineseWord {
-      font-size: 32px;
-      font-weight: 800;
-      color: #111827;
-      margin-bottom: 12px;
-      max-width: 92vw;
-      line-height: 1.3;
-      word-break: break-word;
-      flex-shrink: 0;
+      font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 12px;
+      max-width: 92vw; line-height: 1.3; word-break: break-word; flex-shrink: 0;
     }
 
     #pronunciationArea {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      min-height: 44px;
-      flex-wrap: wrap;
-      max-width: 92vw;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin-bottom: 20px; min-height: 44px; flex-wrap: wrap; max-width: 92vw; flex-shrink: 0;
     }
 
     #speakBtn {
-      background: #10b981;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-      transition: all 0.15s;
-      flex-shrink: 0;
-      min-height: 44px;
-      -webkit-appearance: none;
+      background: #10b981; color: white; border: none; padding: 10px 20px;
+      font-size: 16px; font-weight: bold; border-radius: 12px; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(16,185,129,0.25); transition: all 0.15s;
+      flex-shrink: 0; min-height: 44px; -webkit-appearance: none;
     }
-
-    #speakBtn:active:not(:disabled) {
-      background: #059669;
-      transform: scale(0.97);
-    }
-
-    #speakBtn:disabled {
-      background: #a7f3d0;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+    #speakBtn:active:not(:disabled) { background: #059669; transform: scale(0.97); }
+    #speakBtn:disabled { background: #a7f3d0; cursor: not-allowed; box-shadow: none; }
 
     #phoneticText {
-      font-size: 17px;
-      color: #475569;
-      font-style: italic;
+      font-size: 17px; color: #475569; font-style: italic;
       font-family: "Lucida Sans Unicode", "Arial Unicode MS", "DejaVu Sans", sans-serif;
-      text-align: left;
-      line-height: 1.5;
-      max-width: 90vw;
-      word-break: break-word;
+      text-align: left; line-height: 1.5; max-width: 90vw; word-break: break-word;
     }
 
-    /* ===== 核心：输入区域，适配触摸 ===== */
     #inputArea {
-      min-height: 90px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      width: 100%;
-      max-width: 92vw;
-      flex-shrink: 0;
-      /* 让整个区域可点击，方便唤起键盘 */
-      cursor: text;
+      min-height: 90px; display: flex; align-items: flex-end; justify-content: center;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 16px; width: 100%; max-width: 92vw;
+      flex-shrink: 0; cursor: text;
+      scroll-margin-top: 120px; scroll-margin-bottom: 160px;
     }
 
     .word-slot {
-      min-width: 60px;
-      min-height: 56px;
-      padding: 8px 10px;
-      font-size: 28px;
-      font-weight: 700;
-      border-bottom: 4px solid #334155;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      letter-spacing: 0.5px;
-      color: #111827;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 10px 10px 0 0;
-      /* 重要：禁止文本选中，但保留点击事件 */
-      -webkit-user-select: none;
-      user-select: none;
-      transition: border-color 0.15s, background 0.15s;
-      position: relative;
-      flex-shrink: 0;
+      min-width: 60px; min-height: 56px; padding: 8px 10px; font-size: 28px;
+      font-weight: 700; border-bottom: 4px solid #334155; display: flex;
+      align-items: center; justify-content: center; letter-spacing: 0.5px;
+      color: #111827; background: rgba(255,255,255,0.7);
+      border-radius: 10px 10px 0 0; -webkit-user-select: none; user-select: none;
+      transition: border-color 0.15s, background 0.15s; position: relative; flex-shrink: 0;
     }
-
     .word-slot.active {
-      border-bottom-color: #2563eb;
-      background: rgba(37, 99, 235, 0.10);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      border-bottom-color: #2563eb; background: rgba(37,99,235,0.10);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
     }
+    .placeholder { color: #b6bfcc; font-weight: normal; }
+    .ok { color: #16a34a; }
+    .bad { color: #dc2626; text-decoration: underline; }
 
-    .placeholder {
-      color: #b6bfcc;
-      font-weight: normal;
-    }
+    #hint { color: #64748b; font-size: 13px; line-height: 1.7; max-width: 92vw; flex-shrink: 0; }
 
-    .ok {
-      color: #16a34a;
-    }
-
-    .bad {
-      color: #dc2626;
-      text-decoration: underline;
-    }
-
-    #hint {
-      color: #64748b;
-      font-size: 13px;
-      line-height: 1.7;
-      max-width: 92vw;
-      flex-shrink: 0;
-    }
-
-    /* ===== 结束按钮 ===== */
     #endBtn {
-      position: fixed;
-      right: 16px;
-      bottom: calc(16px + env(safe-area-inset-bottom));
-      z-index: 30;
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.30);
-      min-height: 48px;
-      -webkit-appearance: none;
+      position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom));
+      z-index: 30; background: #dc2626; color: white; border: none;
+      padding: 12px 20px; font-size: 16px; font-weight: bold; border-radius: 14px;
+      cursor: pointer; box-shadow: 0 6px 18px rgba(220,38,38,0.30);
+      min-height: 48px; -webkit-appearance: none;
     }
+    #endBtn:active:not(:disabled) { transform: scale(0.97); }
+    #endBtn:disabled { background: #fca5a5; cursor: not-allowed; box-shadow: none; }
 
-    #endBtn:active:not(:disabled) {
-      transform: scale(0.97);
-    }
-
-    #endBtn:disabled {
-      background: #fca5a5;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    /* ===== 总结弹窗 ===== */
     .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 12px;
-      padding-top: calc(12px + env(safe-area-inset-top));
+      position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+      padding: 12px; padding-top: calc(12px + env(safe-area-inset-top));
       padding-bottom: calc(12px + env(safe-area-inset-bottom));
-      -webkit-backdrop-filter: blur(4px);
-      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
     }
 
     .dialog {
-      width: min(92vw, 600px);
-      max-height: 88vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      background: white;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.30);
+      width: min(92vw, 600px); max-height: 88vh; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; background: white; border-radius: 20px;
+      padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.30);
     }
-
-    .dialog h2 {
-      margin-top: 0;
-      color: #111827;
-      font-size: 20px;
-    }
-
-    .dialog h3 {
-      font-size: 16px;
-      color: #334155;
-      margin: 16px 0 10px;
-    }
+    .dialog h2 { margin-top: 0; color: #111827; font-size: 20px; }
+    .dialog h3 { font-size: 16px; color: #334155; margin: 16px 0 10px; }
 
     .summary-stats {
-      font-size: 15px;
-      line-height: 2;
-      color: #1f2937;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
+      font-size: 15px; line-height: 2; color: #1f2937; background: #f8fafc;
+      border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-bottom: 14px;
     }
 
     .wrong-item {
-      border: 1px solid #fecaca;
-      background: #fff5f5;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-      text-align: left;
+      border: 1px solid #fecaca; background: #fff5f5; border-radius: 12px;
+      padding: 12px; margin-bottom: 10px; text-align: left;
     }
-
-    .wrong-item .zh {
-      font-size: 17px;
-      font-weight: bold;
-      color: #111827;
-      margin-bottom: 6px;
-    }
-
-    .line-label {
-      color: #475569;
-      font-weight: bold;
-      margin-right: 6px;
-      font-size: 14px;
-    }
-
-    .correct-word {
-      color: #15803d;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    .wrong-word {
-      color: #dc2626;
-      font-weight: bold;
-      text-decoration: underline;
-      margin-right: 8px;
-    }
-
-    .missed-word {
-      color: #94a3b8;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    .all-answer {
-      color: #334155;
-      margin-top: 4px;
-      font-size: 14px;
-      word-break: break-word;
-    }
+    .wrong-item .zh { font-size: 17px; font-weight: bold; color: #111827; margin-bottom: 6px; }
+    .line-label { color: #475569; font-weight: bold; margin-right: 6px; font-size: 14px; }
+    .correct-word { color: #15803d; font-weight: bold; margin-right: 8px; }
+    .wrong-word { color: #dc2626; font-weight: bold; text-decoration: underline; margin-right: 8px; }
+    .missed-word { color: #94a3b8; font-weight: bold; margin-right: 8px; }
+    .all-answer { color: #334155; margin-top: 4px; font-size: 14px; word-break: break-word; }
 
     #closeSummaryBtn {
-      margin-top: 14px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-size: 16px;
-      min-height: 48px;
-      width: 100%;
-      -webkit-appearance: none;
+      margin-top: 14px; background: #2563eb; color: white; border: none;
+      cursor: pointer; font-weight: bold; padding: 12px 18px; border-radius: 12px;
+      font-size: 16px; min-height: 48px; width: 100%; -webkit-appearance: none;
     }
+    #closeSummaryBtn:active { background: #1d4ed8; }
 
-    #closeSummaryBtn:active {
-      background: #1d4ed8;
-    }
-
-    /* ===== 隐藏的原生输入框（关键：用于唤起 iOS 键盘） ===== */
     #hiddenInput {
-      position: absolute;
-      /* 放在视口内但完全透明，避免 iOS 判定不可见而不弹出键盘 */
-      top: 0;
-      left: 0;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: transparent;
-      caret-color: transparent;
-      font-size: 16px; /* 避免 iOS 聚焦时缩放 */
-      z-index: -1;
-      pointer-events: none;
-      -webkit-user-select: text;
-      user-select: text;
+      position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0;
+      border: none; outline: none; background: transparent; color: transparent;
+      caret-color: transparent; font-size: 16px; z-index: -1; pointer-events: none;
+      -webkit-user-select: text; user-select: text;
     }
 
-    /* 针对小屏进一步微调 */
     @media (max-width: 380px) {
       #chineseWord { font-size: 26px; }
       .word-slot { font-size: 22px; min-width: 48px; min-height: 48px; }
@@ -446,15 +182,12 @@
   </style>
 </head>
 <body>
-  <!-- 隐藏输入框：通过点击单词槽位聚焦它来唤起键盘，用 input 事件接收字符 -->
   <input id="hiddenInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" />
 
   <div id="topbar">
     <div class="top-row">
       <label for="categorySelect">选择大类</label>
-      <select id="categorySelect">
-        <option value="">请选择</option>
-      </select>
+      <select id="categorySelect"><option value="">请选择</option></select>
       <button id="startBtn" disabled>开始练习</button>
     </div>
     <div class="top-row">
@@ -466,16 +199,12 @@
   <div id="mainArea">
     <div id="progress"></div>
     <div id="chineseWord">请选择大类，然后点击“开始练习”</div>
-
     <div id="pronunciationArea">
       <button id="speakBtn" disabled title="本地音标优先；未收录时尝试在线音标">🔊 发音</button>
       <span id="phoneticText"></span>
     </div>
-
     <div id="inputArea"></div>
-    <div id="hint">
-      点击横线区域唤起键盘 · 字母错误标红 · 空格切换单词 · Enter 提交下一题
-    </div>
+    <div id="hint">点击横线区域唤起键盘 · 字母错误标红 · 空格切换单词 · Enter 提交下一题</div>
   </div>
 
   <button id="endBtn" disabled>结束练习</button>
@@ -490,10 +219,6 @@
     </div>
   </div>
 
-  <!--
-    下面是词库原始数据。
-    程序会自动解析“中文：英文”格式的行。
-  -->
   <script type="text/plain" id="raw-data">
 一、 结构名称
 曲轴：  crankshaft
@@ -791,563 +516,240 @@ V  型块：  V block
   </script>
 
   <script>
-    /**
-     * iOS 适配说明：
-     * 1. 使用隐藏 <input> 接收键盘输入，通过 input / keydown 事件同步到 typedWords。
-     * 2. 点击任意单词槽位时聚焦隐藏输入框，唤起键盘。
-     * 3. 隐藏输入框放在视口内（1x1 透明），避免 iOS 判定不可见而不弹出键盘。
-     * 4. 所有输入处理基于隐藏输入框的 input 事件（兼容 iOS 中文键盘、粘贴等场景）。
-     * 5. 避免使用 keydown 处理普通字符（iOS 上部分键盘不触发可打印字符 keydown），
-     *    改为监听 input 事件做增量处理。
-     */
     const LOCAL_PHONETICS = {
-      // =====================
-      // 通用缩写
-      // =====================
-      "ecn": "/ˌiː siː ˈɛn/",
-      "eco": "/ˌiː siː ˈoʊ/",
-      "pcn": "/ˌpiː siː ˈɛn/",
-      "sop": "/ˌɛs oʊ ˈpiː/",
-      "bom": "/ˌbiː oʊ ˈɛm/",
-      "ps": "/ˌpiː ˈɛs/",
-      "spec": "/spɛk/",
-      "dwg": "/ˌdiː ˌdʌbəljuː ˈdʒiː/",
-
-      // =====================
-      // 常用基础词
-      // =====================
-      "the": "/ðə/",
-      "of": "/əv/",
-      "and": "/ənd/",
-      "or": "/ɔːr/",
-      "for": "/fɔːr/",
-      "v": "/ˈviː/",
-      "block": "/blɑːk/",
-      "center": "/ˈsentər/",
-      "main": "/meɪn/",
-      "pin": "/pɪn/",
-      "front": "/frʌnt/",
-      "rear": "/rɪr/",
-      "end": "/end/",
-      "oil": "/ɔɪl/",
-      "hole": "/hoʊl/",
-      "tool": "/tuːl/",
-      "machine": "/məˈʃiːn/",
-      "wheel": "/wiːl/",
-      "view": "/vjuː/",
-      "section": "/ˈsekʃən/",
-      "drawing": "/ˈdrɔːɪŋ/",
-      "part": "/pɑːrt/",
-      "assembly": "/əˈsembli/",
-      "size": "/saɪz/",
-      "technical": "/ˈteknɪkəl/",
-      "requirements": "/rɪˈkwaɪərmənts/",
-      "standard": "/ˈstændərd/",
-      "component": "/kəmˈpoʊnənt/",
-      "master": "/ˈmæstər/",
-      "piece": "/piːs/",
-      "sample": "/ˈsæmpl/",
-
-      // =====================
-      // 结构名称
-      // =====================
-      "crankshaft": "/ˈkræŋkˌʃæft/",
-      "forged": "/fɔːrdʒd/",
-      "forged crankshaft": "/fɔːrdʒd ˈkræŋkˌʃæft/",
-      "nodular": "/ˈnɑːdʒələr/",
-      "nodular crankshaft": "/ˈnɑːdʒələr ˈkræŋkˌʃæft/",
-      "rear end": "/rɪr end/",
-      "front end": "/frʌnt end/",
-      "journal": "/ˈdʒɝːnəl/",
+      "ecn": "/ˌiː siː ˈɛn/", "eco": "/ˌiː siː ˈoʊ/", "pcn": "/ˌpiː siː ˈɛn/",
+      "sop": "/ˌɛs oʊ ˈpiː/", "bom": "/ˌbiː oʊ ˈɛm/", "ps": "/ˌpiː ˈɛs/",
+      "spec": "/spɛk/", "dwg": "/ˌdiː ˌdʌbəljuː ˈdʒiː/",
+      "the": "/ðə/", "of": "/əv/", "and": "/ənd/", "or": "/ɔːr/", "for": "/fɔːr/",
+      "v": "/ˈviː/", "block": "/blɑːk/", "center": "/ˈsentər/", "main": "/meɪn/",
+      "pin": "/pɪn/", "front": "/frʌnt/", "rear": "/rɪr/", "end": "/end/",
+      "oil": "/ɔɪl/", "hole": "/hoʊl/", "tool": "/tuːl/", "machine": "/məˈʃiːn/",
+      "wheel": "/wiːl/", "view": "/vjuː/", "section": "/ˈsekʃən/", "drawing": "/ˈdrɔːɪŋ/",
+      "part": "/pɑːrt/", "assembly": "/əˈsembli/", "size": "/saɪz/",
+      "technical": "/ˈteknɪkəl/", "requirements": "/rɪˈkwaɪərmənts/",
+      "standard": "/ˈstændərd/", "component": "/kəmˈpoʊnənt/", "master": "/ˈmæstər/",
+      "piece": "/piːs/", "sample": "/ˈsæmpl/",
+      "crankshaft": "/ˈkræŋkˌʃæft/", "forged": "/fɔːrdʒd/",
+      "forged crankshaft": "/fɔːrdʒd ˈkræŋkˌʃæft/", "nodular": "/ˈnɑːdʒələr/",
+      "nodular crankshaft": "/ˈnɑːdʒələr ˈkræŋkˌʃæft/", "rear end": "/rɪr end/",
+      "front end": "/frʌnt end/", "journal": "/ˈdʒɝːnəl/",
       "the rear end journal": "/ðə rɪr end ˈdʒɝːnəl/",
       "the front end journal": "/ðə frʌnt end ˈdʒɝːnəl/",
-      "main journal": "/meɪn ˈdʒɝːnəl/",
-      "pin journal": "/pɪn ˈdʒɝːnəl/",
-      "center main journal": "/ˈsentər meɪn ˈdʒɝːnəl/",
-      "top": "/tɑːp/",
-      "pin top": "/pɪn tɑːp/",
-      "bearing": "/ˈberɪŋ/",
-      "side": "/saɪd/",
-      "face": "/feɪs/",
-      "pin bearing side face": "/pɪn ˈberɪŋ saɪd feɪs/",
-      "crank": "/kræŋk/",
-      "web": "/web/",
-      "crank web": "/kræŋk web/",
-      "counterweight": "/ˈkaʊntərweɪt/",
-      "bearing hole": "/ˈberɪŋ hoʊl/",
-      "located": "/ˈloʊkeɪtɪd/",
-      "mouth": "/maʊθ/",
-      "position": "/pəˈzɪʃən/",
-      "concave": "/ˈkɑːnkeɪv/",
-      "step": "/step/",
-      "thrust": "/θrʌst/",
-      "distance": "/ˈdɪstəns/",
-      "keyway": "/ˈkiːweɪ/",
-      "screw": "/skruː/",
-      "screw hole": "/skruː hoʊl/",
-      "main oil hole": "/meɪn ɔɪl hoʊl/",
-      "pin oil hole": "/pɪn ɔɪl hoʊl/",
-
-      // =====================
-      // 加工工艺
-      // =====================
-      "geometry": "/dʒiˈɑːmətri/",
-      "geometry center": "/dʒiˈɑːmətri ˈsentər/",
-      "mass": "/mæs/",
-      "mass center": "/mæs ˈsentər/",
-      "rough": "/rʌf/",
-      "machining": "/məˈʃiːnɪŋ/",
-      "rough machining": "/rʌf məˈʃiːnɪŋ/",
-      "semi-finish": "/ˌsemi ˈfɪnɪʃ/",
-      "semi-finish machining": "/ˌsemi ˈfɪnɪʃ məˈʃiːnɪŋ/",
-      "finish": "/ˈfɪnɪʃ/",
-      "finish machining": "/ˈfɪnɪʃ məˈʃiːnɪŋ/",
-      "turning": "/ˈtɝːnɪŋ/",
-      "milling": "/ˈmɪlɪŋ/",
-      "drilling": "/ˈdrɪlɪŋ/",
-      "grinding": "/ˈɡraɪndɪŋ/",
-      "boring": "/ˈbɔːrɪŋ/",
-      "honing": "/ˈhoʊnɪŋ/",
-      "turn": "/tɝːn/",
-      "broaching": "/ˈbroʊtʃɪŋ/",
-      "turn turn broaching": "/tɝːn tɝːn ˈbroʊtʃɪŋ/",
-      "fillet": "/ˈfɪlɪt/",
-      "rolling": "/ˈroʊlɪŋ/",
-      "fillet rolling": "/ˈfɪlɪt ˈroʊlɪŋ/",
-      "burnishing": "/ˈbɝːnɪʃɪŋ/",
-      "turn burnishing": "/tɝːn ˈbɝːnɪʃɪŋ/",
-      "chamfering": "/ˈtʃæmfərɪŋ/",
-      "burr": "/bɝː/",
-      "removed": "/rɪˈmuːvd/",
-      "burr removed": "/bɝː rɪˈmuːvd/",
-      "dynamic": "/daɪˈnæmɪk/",
-      "balance": "/ˈbæləns/",
-      "dynamic balance": "/daɪˈnæmɪk ˈbæləns/",
-      "polishing": "/ˈpɑːlɪʃɪŋ/",
-      "washing": "/ˈwɑːʃɪŋ/",
-      "anti": "/ˈæntaɪ/",
-      "corrosion": "/kəˈroʊʒən/",
-      "anti corrosion": "/ˈæntaɪ kəˈroʊʒən/",
-      "antirust": "/ˈæntaɪrʌst/",
-      "packing": "/ˈpækɪŋ/",
-      "packaging": "/ˈpækɪdʒɪŋ/",
-      "radii": "/ˈreɪdiaɪ/",
-      "fillet radii": "/ˈfɪlɪt ˈreɪdiaɪ/",
-      "dressing": "/ˈdresɪŋ/",
-      "facility": "/fəˈsɪləti/",
-      "tooling": "/ˈtuːlɪŋ/",
-      "gage": "/ɡeɪdʒ/",
-      "gauge": "/ɡeɪdʒ/",
-      "benchmark": "/ˈbentʃmɑːrk/",
-      "lathe": "/leɪð/",
-      "axial": "/ˈæksiəl/",
-      "technics": "/ˈteknɪks/",
-      "machining technics": "/məˈʃiːnɪŋ ˈteknɪks/",
-      "special": "/ˈspeʃəl/",
+      "main journal": "/meɪn ˈdʒɝːnəl/", "pin journal": "/pɪn ˈdʒɝːnəl/",
+      "center main journal": "/ˈsentər meɪn ˈdʒɝːnəl/", "top": "/tɑːp/",
+      "pin top": "/pɪn tɑːp/", "bearing": "/ˈberɪŋ/", "side": "/saɪd/", "face": "/feɪs/",
+      "pin bearing side face": "/pɪn ˈberɪŋ saɪd feɪs/", "crank": "/kræŋk/",
+      "web": "/web/", "crank web": "/kræŋk web/", "counterweight": "/ˈkaʊntərweɪt/",
+      "bearing hole": "/ˈberɪŋ hoʊl/", "located": "/ˈloʊkeɪtɪd/", "mouth": "/maʊθ/",
+      "position": "/pəˈzɪʃən/", "concave": "/ˈkɑːnkeɪv/", "step": "/step/",
+      "thrust": "/θrʌst/", "distance": "/ˈdɪstəns/", "keyway": "/ˈkiːweɪ/",
+      "screw": "/skruː/", "screw hole": "/skruː hoʊl/",
+      "main oil hole": "/meɪn ɔɪl hoʊl/", "pin oil hole": "/pɪn ɔɪl hoʊl/",
+      "geometry": "/dʒiˈɑːmətri/", "geometry center": "/dʒiˈɑːmətri ˈsentər/",
+      "mass": "/mæs/", "mass center": "/mæs ˈsentər/", "rough": "/rʌf/",
+      "machining": "/məˈʃiːnɪŋ/", "rough machining": "/rʌf məˈʃiːnɪŋ/",
+      "semi-finish": "/ˌsemi ˈfɪnɪʃ/", "semi-finish machining": "/ˌsemi ˈfɪnɪʃ məˈʃiːnɪŋ/",
+      "finish": "/ˈfɪnɪʃ/", "finish machining": "/ˈfɪnɪʃ məˈʃiːnɪŋ/",
+      "turning": "/ˈtɝːnɪŋ/", "milling": "/ˈmɪlɪŋ/", "drilling": "/ˈdrɪlɪŋ/",
+      "grinding": "/ˈɡraɪndɪŋ/", "boring": "/ˈbɔːrɪŋ/", "honing": "/ˈhoʊnɪŋ/",
+      "turn": "/tɝːn/", "broaching": "/ˈbroʊtʃɪŋ/",
+      "turn turn broaching": "/tɝːn tɝːn ˈbroʊtʃɪŋ/", "fillet": "/ˈfɪlɪt/",
+      "rolling": "/ˈroʊlɪŋ/", "fillet rolling": "/ˈfɪlɪt ˈroʊlɪŋ/",
+      "burnishing": "/ˈbɝːnɪʃɪŋ/", "turn burnishing": "/tɝːn ˈbɝːnɪʃɪŋ/",
+      "chamfering": "/ˈtʃæmfərɪŋ/", "burr": "/bɝː/", "removed": "/rɪˈmuːvd/",
+      "burr removed": "/bɝː rɪˈmuːvd/", "dynamic": "/daɪˈnæmɪk/",
+      "balance": "/ˈbæləns/", "dynamic balance": "/daɪˈnæmɪk ˈbæləns/",
+      "polishing": "/ˈpɑːlɪʃɪŋ/", "washing": "/ˈwɑːʃɪŋ/", "anti": "/ˈæntaɪ/",
+      "corrosion": "/kəˈroʊʒən/", "anti corrosion": "/ˈæntaɪ kəˈroʊʒən/",
+      "antirust": "/ˈæntaɪrʌst/", "packing": "/ˈpækɪŋ/", "packaging": "/ˈpækɪdʒɪŋ/",
+      "radii": "/ˈreɪdiaɪ/", "fillet radii": "/ˈfɪlɪt ˈreɪdiaɪ/",
+      "dressing": "/ˈdresɪŋ/", "facility": "/fəˈsɪləti/", "tooling": "/ˈtuːlɪŋ/",
+      "gage": "/ɡeɪdʒ/", "gauge": "/ɡeɪdʒ/", "benchmark": "/ˈbentʃmɑːrk/",
+      "lathe": "/leɪð/", "axial": "/ˈæksiəl/", "technics": "/ˈteknɪks/",
+      "machining technics": "/məˈʃiːnɪŋ ˈteknɪks/", "special": "/ˈspeʃəl/",
       "characteristic": "/ˌkerəktəˈrɪstɪk/",
       "special characteristic": "/ˈspeʃəl ˌkerəktəˈrɪstɪk/",
-      "roughness": "/ˈrʌfnəs/",
-      "blank": "/blæŋk/",
-      "raw": "/rɔː/",
-      "dimension": "/dɪˈmenʃən/",
-      "cleanliness": "/ˈklenlinəs/",
-      "open": "/ˈoʊpən/",
-      "width": "/wɪdθ/",
-      "open journal width": "/ˈoʊpən ˈdʒɝːnəl wɪdθ/",
-      "capacity": "/kəˈpæsəti/",
-
-      // =====================
-      // 形位公差
-      // =====================
-      "tolerance": "/ˈtɑːlərəns/",
-      "cylindricity": "/ˌsɪlɪnˈdrɪsəti/",
-      "parallelism": "/ˈperəlelɪzəm/",
-      "verticality": "/ˌvɝːtɪˈkæləti/",
-      "perpendicularity": "/pərˌpendɪkjəˈlærəti/",
-      "linearity": "/ˌlɪniˈærəti/",
-      "location": "/loʊˈkeɪʃən/",
-      "symmetry": "/ˈsɪmətri/",
-      "slant": "/slænt/",
-      "runout": "/ˈrʌnaʊt/",
-      "total": "/ˈtoʊtəl/",
-      "indicator": "/ˈɪndɪkeɪtər/",
-      "total indicator runout": "/ˈtoʊtəl ˈɪndɪkeɪtər ˈrʌnaʊt/",
-      "v block": "/ˈviː blɑːk/",
-
-      // =====================
-      // 探伤
-      // =====================
-      "detecting": "/dɪˈtektɪŋ/",
-      "detection": "/dɪˈtekʃən/",
-      "magnetic": "/mæɡˈnetɪk/",
-      "particle": "/ˈpɑːrtɪkəl/",
-      "inspection": "/ɪnˈspekʃən/",
+      "roughness": "/ˈrʌfnəs/", "blank": "/blæŋk/", "raw": "/rɔː/",
+      "dimension": "/dɪˈmenʃən/", "cleanliness": "/ˈklenlinəs/", "open": "/ˈoʊpən/",
+      "width": "/wɪdθ/", "open journal width": "/ˈoʊpən ˈdʒɝːnəl wɪdθ/",
+      "capacity": "/kəˈpæsəti/", "tolerance": "/ˈtɑːlərəns/",
+      "cylindricity": "/ˌsɪlɪnˈdrɪsəti/", "parallelism": "/ˈperəlelɪzəm/",
+      "verticality": "/ˌvɝːtɪˈkæləti/", "perpendicularity": "/pərˌpendɪkjəˈlærəti/",
+      "linearity": "/ˌlɪniˈærəti/", "location": "/loʊˈkeɪʃən/", "symmetry": "/ˈsɪmətri/",
+      "slant": "/slænt/", "runout": "/ˈrʌnaʊt/", "total": "/ˈtoʊtəl/",
+      "indicator": "/ˈɪndɪkeɪtər/", "total indicator runout": "/ˈtoʊtəl ˈɪndɪkeɪtər ˈrʌnaʊt/",
+      "v block": "/ˈviː blɑːk/", "detecting": "/dɪˈtektɪŋ/", "detection": "/dɪˈtekʃən/",
+      "magnetic": "/mæɡˈnetɪk/", "particle": "/ˈpɑːrtɪkəl/", "inspection": "/ɪnˈspekʃən/",
       "magnetic particle inspection": "/mæɡˈnetɪk ˈpɑːrtɪkəl ɪnˈspekʃən/",
       "fluorescent": "/ˌflʊəˈresənt/",
       "fluorescent magnetic particle inspection": "/ˌflʊəˈresənt mæɡˈnetɪk ˈpɑːrtɪkəl ɪnˈspekʃən/",
-      "residual": "/rɪˈzɪdʒuəl/",
-      "magnetism": "/ˈmæɡnətɪzəm/",
-      "residual magnetism": "/rɪˈzɪdʒuəl ˈmæɡnətɪzəm/",
-      "demagnetize": "/ˌdiːˈmæɡnətaɪz/",
-      "cracks": "/kræks/",
-      "grinding cracks": "/ˈɡraɪndɪŋ kræks/",
-      "heat": "/hiːt/",
-      "treatment": "/ˈtriːtmənt/",
-      "heat treatment cracks": "/hiːt ˈtriːtmənt kræks/",
-      "burns": "/bɝːnz/",
-      "grinding burns": "/ˈɡraɪndɪŋ bɝːnz/",
-      "flow": "/floʊ/",
-      "lines": "/laɪnz/",
-      "flow lines": "/floʊ laɪnz/",
-      "non-metallic": "/ˌnɑːn məˈtælɪk/",
+      "residual": "/rɪˈzɪdʒuəl/", "magnetism": "/ˈmæɡnətɪzəm/",
+      "residual magnetism": "/rɪˈzɪdʒuəl ˈmæɡnətɪzəm/", "demagnetize": "/ˌdiːˈmæɡnətaɪz/",
+      "cracks": "/kræks/", "grinding cracks": "/ˈɡraɪndɪŋ kræks/",
+      "heat": "/hiːt/", "treatment": "/ˈtriːtmənt/",
+      "heat treatment cracks": "/hiːt ˈtriːtmənt kræks/", "burns": "/bɝːnz/",
+      "grinding burns": "/ˈɡraɪndɪŋ bɝːnz/", "flow": "/floʊ/", "lines": "/laɪnz/",
+      "flow lines": "/floʊ laɪnz/", "non-metallic": "/ˌnɑːn məˈtælɪk/",
       "inclusions": "/ɪnˈkluːʒənz/",
       "non-metallic inclusions": "/ˌnɑːn məˈtælɪk ɪnˈkluːʒənz/",
-      "circular": "/ˈsɝːkjələr/",
-      "magnetization": "/ˌmæɡnətəˈzeɪʃən/",
+      "circular": "/ˈsɝːkjələr/", "magnetization": "/ˌmæɡnətəˈzeɪʃən/",
       "circular magnetization": "/ˈsɝːkjələr ˌmæɡnətəˈzeɪʃən/",
       "longitudinal": "/ˌlɑːndʒəˈtuːdənəl/",
       "longitudinal magnetization": "/ˌlɑːndʒəˈtuːdənəl ˌmæɡnətəˈzeɪʃən/",
-
-      // =====================
-      // 热处理
-      // =====================
-      "heat treatment": "/hiːt ˈtriːtmənt/",
-      "normalizing": "/ˈnɔːrməlaɪzɪŋ/",
-      "hardening": "/ˈhɑːrdənɪŋ/",
-      "quenching": "/ˈkwentʃɪŋ/",
-      "tempering": "/ˈtempərɪŋ/",
-      "annealing": "/əˈniːlɪŋ/",
-      "quench-tempering": "/ˌkwentʃ ˈtempərɪŋ/",
-      "isothermal": "/ˌaɪsəˈθɝːməl/",
-      "isothermal annealing": "/ˌaɪsəˈθɝːməl əˈniːlɪŋ/",
-      "effective": "/ɪˈfektɪv/",
-      "case": "/keɪs/",
-      "depth": "/depθ/",
-      "effective case depth": "/ɪˈfektɪv keɪs depθ/",
-      "shot": "/ʃɑːt/",
-      "blasting": "/ˈblæstɪŋ/",
-      "shot blasting": "/ʃɑːt ˈblæstɪŋ/",
-      "straighten": "/ˈstreɪtən/",
-      "stress": "/stres/",
-      "relieving": "/rɪˈliːvɪŋ/",
-      "stress relieving": "/stres rɪˈliːvɪŋ/",
-      "metallographic": "/ˌmetəloʊˈɡræfɪk/",
-      "metallurgical": "/ˌmetəlɝːdʒɪkəl/",
-      "mechanical": "/məˈkænɪkəl/",
-      "property": "/ˈprɑːpərti/",
-      "mechanical property": "/məˈkænɪkəl ˈprɑːpərti/",
-      "chemical": "/ˈkemɪkəl/",
-      "composition": "/ˌkɑːmpəˈzɪʃən/",
-      "chemical composition": "/ˈkemɪkəl ˌkɑːmpəˈzɪʃən/",
-      "tensile": "/ˈtensaɪl/",
-      "strength": "/streŋθ/",
-      "tensile strength": "/ˈtensaɪl streŋθ/",
-      "yield": "/jiːld/",
-      "yield strength": "/jiːld streŋθ/",
-      "elongation": "/ˌiːlɔːŋˈɡeɪʃən/",
-      "reduction": "/rɪˈdʌkʃən/",
-      "area": "/ˈeriə/",
-      "reduction of area": "/rɪˈdʌkʃən əv ˈeriə/",
-      "surface": "/ˈsɝːfɪs/",
-      "hardness": "/ˈhɑːrdnəs/",
-      "surface hardness": "/ˈsɝːfɪs ˈhɑːrdnəs/",
-      "as-forged": "/æz fɔːrdʒd/",
-      "controlled": "/kənˈtroʊld/",
-      "cooled": "/kuːld/",
+      "heat treatment": "/hiːt ˈtriːtmənt/", "normalizing": "/ˈnɔːrməlaɪzɪŋ/",
+      "hardening": "/ˈhɑːrdənɪŋ/", "quenching": "/ˈkwentʃɪŋ/", "tempering": "/ˈtempərɪŋ/",
+      "annealing": "/əˈniːlɪŋ/", "quench-tempering": "/ˌkwentʃ ˈtempərɪŋ/",
+      "isothermal": "/ˌaɪsəˈθɝːməl/", "isothermal annealing": "/ˌaɪsəˈθɝːməl əˈniːlɪŋ/",
+      "effective": "/ɪˈfektɪv/", "case": "/keɪs/", "depth": "/depθ/",
+      "effective case depth": "/ɪˈfektɪv keɪs depθ/", "shot": "/ʃɑːt/",
+      "blasting": "/ˈblæstɪŋ/", "shot blasting": "/ʃɑːt ˈblæstɪŋ/",
+      "straighten": "/ˈstreɪtən/", "stress": "/stres/", "relieving": "/rɪˈliːvɪŋ/",
+      "stress relieving": "/stres rɪˈliːvɪŋ/", "metallographic": "/ˌmetəloʊˈɡræfɪk/",
+      "metallurgical": "/ˌmetəlɝːdʒɪkəl/", "mechanical": "/məˈkænɪkəl/",
+      "property": "/ˈprɑːpərti/", "mechanical property": "/məˈkænɪkəl ˈprɑːpərti/",
+      "chemical": "/ˈkemɪkəl/", "composition": "/ˌkɑːmpəˈzɪʃən/",
+      "chemical composition": "/ˈkemɪkəl ˌkɑːmpəˈzɪʃən/", "tensile": "/ˈtensaɪl/",
+      "strength": "/streŋθ/", "tensile strength": "/ˈtensaɪl streŋθ/",
+      "yield": "/jiːld/", "yield strength": "/jiːld streŋθ/",
+      "elongation": "/ˌiːlɔːŋˈɡeɪʃən/", "reduction": "/rɪˈdʌkʃən/", "area": "/ˈeriə/",
+      "reduction of area": "/rɪˈdʌkʃən əv ˈeriə/", "surface": "/ˈsɝːfɪs/",
+      "hardness": "/ˈhɑːrdnəs/", "surface hardness": "/ˈsɝːfɪs ˈhɑːrdnəs/",
+      "as-forged": "/æz fɔːrdʒd/", "controlled": "/kənˈtroʊld/", "cooled": "/kuːld/",
       "as-forged and controlled cooled": "/æz fɔːrdʒd ənd kənˈtroʊld kuːld/",
-      "specimen": "/ˈspesɪmən/",
-      "tensile specimen": "/ˈtensaɪl ˈspesɪmən/",
+      "specimen": "/ˈspesɪmən/", "tensile specimen": "/ˈtensaɪl ˈspesɪmən/",
       "microstructural": "/ˌmaɪkroʊˈstrʌktʃərəl/",
       "microstructural sample": "/ˌmaɪkroʊˈstrʌktʃərəl ˈsæmpl/",
-      "microstructure": "/ˈmaɪkroʊˌstrʌktʃər/",
-      "ferrite": "/ˈferɪt/",
-      "pearlite": "/ˈpɝːlɪt/",
-      "bainite": "/ˈbeɪnaɪt/",
-      "austenite": "/ˈɔːstənaɪt/",
-      "martensite": "/ˈmɑːrtənsaɪt/",
-      "sorbite": "/ˈsɔːrbaɪt/",
-      "grain": "/ɡreɪn/",
-      "grain size": "/ɡreɪn saɪz/",
-
-      // =====================
-      // 其它
-      // =====================
-      "diesel": "/ˈdiːzəl/",
-      "engine": "/ˈendʒɪn/",
-      "diesel engine": "/ˈdiːzəl ˈendʒɪn/",
-      "gasoline": "/ˈɡæsəliːn/",
-      "gasoline engine": "/ˈɡæsəliːn ˈendʒɪn/",
-      "draft": "/dræft/",
-      "angle": "/ˈæŋɡəl/",
-      "draft angle": "/dræft ˈæŋɡəl/",
-      "phase": "/feɪz/",
-      "phase angle": "/feɪz ˈæŋɡəl/",
-      "flywheel": "/ˈflaɪwiːl/",
-      "cylinder": "/ˈsɪlɪndər/",
-      "cylinder block": "/ˈsɪlɪndər blɑːk/",
-      "head": "/hed/",
-      "cylinder head": "/ˈsɪlɪndər hed/",
-      "gear": "/ɡɪr/",
-      "fracture-split": "/ˈfræktʃər splɪt/",
-      "connecting": "/kəˈnektɪŋ/",
-      "rod": "/rɑːd/",
+      "microstructure": "/ˈmaɪkroʊˌstrʌktʃər/", "ferrite": "/ˈferɪt/",
+      "pearlite": "/ˈpɝːlɪt/", "bainite": "/ˈbeɪnaɪt/", "austenite": "/ˈɔːstənaɪt/",
+      "martensite": "/ˈmɑːrtənsaɪt/", "sorbite": "/ˈsɔːrbaɪt/", "grain": "/ɡreɪn/",
+      "grain size": "/ɡreɪn saɪz/", "diesel": "/ˈdiːzəl/", "engine": "/ˈendʒɪn/",
+      "diesel engine": "/ˈdiːzəl ˈendʒɪn/", "gasoline": "/ˈɡæsəliːn/",
+      "gasoline engine": "/ˈɡæsəliːn ˈendʒɪn/", "draft": "/dræft/", "angle": "/ˈæŋɡəl/",
+      "draft angle": "/dræft ˈæŋɡəl/", "phase": "/feɪz/", "phase angle": "/feɪz ˈæŋɡəl/",
+      "flywheel": "/ˈflaɪwiːl/", "cylinder": "/ˈsɪlɪndər/",
+      "cylinder block": "/ˈsɪlɪndər blɑːk/", "head": "/hed/",
+      "cylinder head": "/ˈsɪlɪndər hed/", "gear": "/ɡɪr/",
+      "fracture-split": "/ˈfræktʃər splɪt/", "connecting": "/kəˈnektɪŋ/", "rod": "/rɑːd/",
       "fracture-split connecting rod": "/ˈfræktʃər splɪt kəˈnektɪŋ rɑːd/",
-      "production": "/prəˈdʌkʃən/",
-      "volume": "/ˈvɑːljuːm/",
-      "serial": "/ˈsɪriəl/",
-      "mass production": "/mæs prəˈdʌkʃən/",
-      "volume production": "/ˈvɑːljuːm prəˈdʌkʃən/",
-      "serial production": "/ˈsɪriəl prəˈdʌkʃən/",
-      "internal": "/ɪnˈtɝːnəl/",
+      "production": "/prəˈdʌkʃən/", "volume": "/ˈvɑːljuːm/", "serial": "/ˈsɪriəl/",
+      "mass production": "/mæs prəˈdʌkʃən/", "volume production": "/ˈvɑːljuːm prəˈdʌkʃən/",
+      "serial production": "/ˈsɪriəl prəˈdʌkʃən/", "internal": "/ɪnˈtɝːnəl/",
       "combustion": "/kəmˈbʌstʃən/",
       "internal combustion engine": "/ɪnˈtɝːnəl kəmˈbʌstʃən ˈendʒɪn/",
-      "torque": "/tɔːrk/",
-      "horse": "/hɔːrs/",
-      "power": "/ˈpaʊər/",
-      "horse power": "/hɔːrs ˈpaʊər/",
-      "direction": "/dəˈrekʃən/",
-      "rotation": "/roʊˈteɪʃən/",
-      "direction of rotation": "/dəˈrekʃən əv roʊˈteɪʃən/",
-      "clockwise": "/ˈklɑːkwaɪz/",
-      "counter-clockwise": "/ˌkaʊntər ˈklɑːkwaɪz/",
-      "air": "/er/",
-      "cooling": "/ˈkuːlɪŋ/",
-      "air cooling": "/er ˈkuːlɪŋ/",
-      "water": "/ˈwɔːtər/",
-      "water cooling": "/ˈwɔːtər ˈkuːlɪŋ/",
-      "emission": "/ɪˈmɪʃən/",
-      "exhaust": "/ɪɡˈzɔːst/",
-      "system": "/ˈsɪstəm/",
-      "exhaust system": "/ɪɡˈzɔːst ˈsɪstəm/",
-      "lubricant": "/ˈluːbrɪkənt/",
-      "metal": "/ˈmetəl/",
-      "cutting": "/ˈkʌtɪŋ/",
-      "metal cutting": "/ˈmetəl ˈkʌtɪŋ/",
-      "machine tool": "/məˈʃiːn tuːl/",
-      "technology": "/tekˈnɑːlədʒi/",
-      "metals": "/ˈmetəlz/",
-      "technology of metals": "/tekˈnɑːlədʒi əv ˈmetəlz/",
-      "metal technology": "/ˈmetəl tekˈnɑːlədʒi/",
-      "cutter": "/ˈkʌtər/",
-      "friction": "/ˈfrɪkʃən/",
-      "link": "/lɪŋk/",
-      "drive": "/draɪv/",
-      "transmission": "/trænzˈmɪʃən/",
-      "elasticity": "/ˌiːlæˈstɪsəti/",
+      "torque": "/tɔːrk/", "horse": "/hɔːrs/", "power": "/ˈpaʊər/",
+      "horse power": "/hɔːrs ˈpaʊər/", "direction": "/dəˈrekʃən/",
+      "rotation": "/roʊˈteɪʃən/", "direction of rotation": "/dəˈrekʃən əv roʊˈteɪʃən/",
+      "clockwise": "/ˈklɑːkwaɪz/", "counter-clockwise": "/ˌkaʊntər ˈklɑːkwaɪz/",
+      "air": "/er/", "cooling": "/ˈkuːlɪŋ/", "air cooling": "/er ˈkuːlɪŋ/",
+      "water": "/ˈwɔːtər/", "water cooling": "/ˈwɔːtər ˈkuːlɪŋ/",
+      "emission": "/ɪˈmɪʃən/", "exhaust": "/ɪɡˈzɔːst/", "system": "/ˈsɪstəm/",
+      "exhaust system": "/ɪɡˈzɔːst ˈsɪstəm/", "lubricant": "/ˈluːbrɪkənt/",
+      "metal": "/ˈmetəl/", "cutting": "/ˈkʌtɪŋ/", "metal cutting": "/ˈmetəl ˈkʌtɪŋ/",
+      "machine tool": "/məˈʃiːn tuːl/", "technology": "/tekˈnɑːlədʒi/",
+      "metals": "/ˈmetəlz/", "technology of metals": "/tekˈnɑːlədʒi əv ˈmetəlz/",
+      "metal technology": "/ˈmetəl tekˈnɑːlədʒi/", "cutter": "/ˈkʌtər/",
+      "friction": "/ˈfrɪkʃən/", "link": "/lɪŋk/", "drive": "/draɪv/",
+      "transmission": "/trænzˈmɪʃən/", "elasticity": "/ˌiːlæˈstɪsəti/",
       "frequency": "/ˈfriːkwənsi/",
       "frequency characteristic": "/ˈfriːkwənsi ˌkerəktəˈrɪstɪk/",
-      "error": "/ˈerər/",
-      "response": "/rɪˈspɑːns/",
-      "positioning": "/pəˈzɪʃənɪŋ/",
-      "jig": "/dʒɪɡ/",
-      "kinematic": "/ˌkɪnəˈmætɪk/",
-      "static": "/ˈstætɪk/",
-      "analytical": "/ˌænəˈlɪtɪkəl/",
-      "mechanics": "/məˈkænɪks/",
-      "analytical mechanics": "/ˌænəˈlɪtɪkəl məˈkænɪks/",
-      "pulling": "/ˈpʊlɪŋ/",
-      "hitting": "/ˈhɪtɪŋ/",
-      "shear": "/ʃɪr/",
-      "twist": "/twɪst/",
-      "torsion": "/ˈtɔːrʃən/",
-      "bending": "/ˈbendɪŋ/",
-      "bending stress": "/ˈbendɪŋ stres/",
-      "intensity": "/ɪnˈtensəti/",
-      "geometrical": "/ˌdʒiːəˈmetrɪkəl/",
-      "precision": "/prɪˈsɪʒən/",
-      "sinusoid": "/ˈsaɪnəsɔɪd/",
-      "allowance": "/əˈlaʊəns/",
-      "machining allowance": "/məˈʃiːnɪŋ əˈlaʊəns/",
-      "deforming": "/dɪˈfɔːrmɪŋ/",
-      "force": "/fɔːrs/",
-      "deforming force": "/dɪˈfɔːrmɪŋ fɔːrs/",
-      "deformation": "/ˌdiːfɔːrˈmeɪʃən/",
-      "rigidity": "/rɪˈdʒɪdəti/",
-      "decarburization": "/ˌdiːˌkɑːrbərəˈzeɪʃən/",
-      "carburization": "/ˌkɑːrbərəˈzeɪʃən/",
-      "external": "/ɪkˈstɝːnəl/",
-      "external grinding": "/ɪkˈstɝːnəl ˈɡraɪndɪŋ/",
-      "internal grinding": "/ɪnˈtɝːnəl ˈɡraɪndɪŋ/",
-      "plane": "/pleɪn/",
-      "plane grinding": "/pleɪn ˈɡraɪndɪŋ/",
-      "gearbox": "/ˈɡɪrbɑːks/",
-      "clutch": "/klʌtʃ/",
-      "fraising": "/ˈfreɪzɪŋ/",
-      "reaming": "/ˈriːmɪŋ/",
-      "reamer": "/ˈriːmər/",
-      "thread": "/θred/",
-      "processing": "/ˈprɑːsesɪŋ/",
-      "thread processing": "/θred ˈprɑːsesɪŋ/",
-      "milling cutter": "/ˈmɪlɪŋ ˈkʌtər/",
-      "workpiece": "/ˈwɝːrkpiːs/",
-      "gear machining": "/ɡɪr məˈʃiːnɪŋ/",
-      "movement": "/ˈmuːvmənt/",
-      "main movement": "/meɪn ˈmuːvmənt/",
-      "cutting depth": "/ˈkʌtɪŋ depθ/",
-      "machining center": "/məˈʃiːnɪŋ ˈsentər/",
-      "lathe tool": "/leɪð tuːl/",
-      "bore": "/bɔːr/",
-      "grinder": "/ˈɡraɪndər/",
-      "locksmith": "/ˈlɑːksmɪθ/",
-      "forge": "/fɔːrdʒ/",
-      "stamping": "/ˈstæmpɪŋ/",
-      "weld": "/weld/",
-      "broaching machine": "/ˈbroʊtʃɪŋ məˈʃiːn/",
-      "assembling": "/əˈsemblɪŋ/",
-      "found": "/faʊnd/",
-      "casting": "/ˈkæstɪŋ/",
-      "foundry": "/ˈfaʊndri/",
-      "fluid": "/ˈfluːɪd/",
-      "dynamics": "/daɪˈnæmɪks/",
-      "fluid dynamics": "/ˈfluːɪd daɪˈnæmɪks/",
-      "fluid mechanics": "/ˈfluːɪd məˈkænɪks/",
-      "tangent": "/ˈtændʒənt/",
-      "pressure": "/ˈpreʃər/",
-      "air pressure": "/er ˈpreʃər/",
-      "pneumatic": "/nʊˈmætɪk/",
-      "pneumatic pressure": "/nʊˈmætɪk ˈpreʃər/",
-      "stability": "/stəˈbɪləti/",
-      "medium": "/ˈmiːdiəm/",
-      "invalidation": "/ɪnˌvælɪˈdeɪʃən/",
-      "load": "/loʊd/",
-      "safety": "/ˈseɪfti/",
-      "factor": "/ˈfæktər/",
-      "safety factor": "/ˈseɪfti ˈfæktər/",
-      "reliability": "/rɪˌlaɪəˈbɪləti/",
-      "helix": "/ˈhiːlɪks/",
-      "key": "/kiː/",
-      "rolling bearing": "/ˈroʊlɪŋ ˈberɪŋ/",
-      "sliding": "/ˈslaɪdɪŋ/",
-      "sliding bearing": "/ˈslaɪdɪŋ ˈberɪŋ/",
-      "spring": "/sprɪŋ/",
-      "arrester": "/əˈrestər/",
-      "brake": "/breɪk/",
-      "arrester brake": "/əˈrestər breɪk/",
-      "strap": "/stræp/",
-      "rust": "/rʌst/",
-      "oxidation": "/ˌɑːksəˈdeɪʃən/",
-      "wear": "/wer/",
-      "durability": "/ˌdʊrəˈbɪləti/",
-      "residual stress": "/rɪˈzɪdʒuəl stres/",
-      "cold": "/koʊld/",
-      "cold machining": "/koʊld məˈʃiːnɪŋ/",
-      "electromotor": "/ɪˌlektroʊˈmoʊtər/",
-      "interference": "/ˌɪntərˈfɪrəns/",
-      "fit": "/fɪt/",
-      "interference fit": "/ˌɪntərˈfɪrəns fɪt/",
-      "hotwork": "/ˈhɑːtwɝːrk/",
-      "camera": "/ˈkæmərə/",
-      "rounding": "/ˈraʊndɪŋ/",
-      "rounding chamfer": "/ˈraʊndɪŋ ˈtʃæmfər/",
-      "optimal": "/ˈɑːptɪməl/",
-      "design": "/dɪˈzaɪn/",
-      "optimal design": "/ˈɑːptɪməl dɪˈzaɪn/",
-      "finite": "/ˈfaɪnaɪt/",
-      "element": "/ˈelɪmənt/",
-      "finite element": "/ˈfaɪnaɪt ˈelɪmənt/",
-      "hobbing": "/ˈhɑːbɪŋ/",
-      "shaping": "/ˈʃeɪpɪŋ/",
-      "gear shaping": "/ɡɪr ˈʃeɪpɪŋ/",
-      "actuating": "/ˈæktʃueɪtɪŋ/",
-      "motor": "/ˈmoʊtər/",
-      "actuating motor": "/ˈæktʃueɪtɪŋ ˈmoʊtər/",
-      "servo": "/ˈsɝːvoʊ/",
-      "servo motor": "/ˈsɝːvoʊ ˈmoʊtər/",
-      "milling machine": "/ˈmɪlɪŋ məˈʃiːn/",
-      "drill": "/drɪl/",
-      "drill machine": "/drɪl məˈʃiːn/",
-      "drilling machine": "/ˈdrɪlɪŋ məˈʃiːn/",
-      "boring machine": "/ˈbɔːrɪŋ məˈʃiːn/",
-      "electric": "/ɪˈlektrɪk/",
-      "spark": "/spɑːrk/",
+      "error": "/ˈerər/", "response": "/rɪˈspɑːns/", "positioning": "/pəˈzɪʃənɪŋ/",
+      "jig": "/dʒɪɡ/", "kinematic": "/ˌkɪnəˈmætɪk/", "static": "/ˈstætɪk/",
+      "analytical": "/ˌænəˈlɪtɪkəl/", "mechanics": "/məˈkænɪks/",
+      "analytical mechanics": "/ˌænəˈlɪtɪkəl məˈkænɪks/", "pulling": "/ˈpʊlɪŋ/",
+      "hitting": "/ˈhɪtɪŋ/", "shear": "/ʃɪr/", "twist": "/twɪst/",
+      "torsion": "/ˈtɔːrʃən/", "bending": "/ˈbendɪŋ/",
+      "bending stress": "/ˈbendɪŋ stres/", "intensity": "/ɪnˈtensəti/",
+      "geometrical": "/ˌdʒiːəˈmetrɪkəl/", "precision": "/prɪˈsɪʒən/",
+      "sinusoid": "/ˈsaɪnəsɔɪd/", "allowance": "/əˈlaʊəns/",
+      "machining allowance": "/məˈʃiːnɪŋ əˈlaʊəns/", "deforming": "/dɪˈfɔːrmɪŋ/",
+      "force": "/fɔːrs/", "deforming force": "/dɪˈfɔːrmɪŋ fɔːrs/",
+      "deformation": "/ˌdiːfɔːrˈmeɪʃən/", "rigidity": "/rɪˈdʒɪdəti/",
+      "decarburization": "/ˌdiːˌkɑːrbərəˈzeɪʃən/", "carburization": "/ˌkɑːrbərəˈzeɪʃən/",
+      "external": "/ɪkˈstɝːnəl/", "external grinding": "/ɪkˈstɝːnəl ˈɡraɪndɪŋ/",
+      "internal grinding": "/ɪnˈtɝːnəl ˈɡraɪndɪŋ/", "plane": "/pleɪn/",
+      "plane grinding": "/pleɪn ˈɡraɪndɪŋ/", "gearbox": "/ˈɡɪrbɑːks/",
+      "clutch": "/klʌtʃ/", "fraising": "/ˈfreɪzɪŋ/", "reaming": "/ˈriːmɪŋ/",
+      "reamer": "/ˈriːmər/", "thread": "/θred/", "processing": "/ˈprɑːsesɪŋ/",
+      "thread processing": "/θred ˈprɑːsesɪŋ/", "milling cutter": "/ˈmɪlɪŋ ˈkʌtər/",
+      "workpiece": "/ˈwɝːrkpiːs/", "gear machining": "/ɡɪr məˈʃiːnɪŋ/",
+      "movement": "/ˈmuːvmənt/", "main movement": "/meɪn ˈmuːvmənt/",
+      "cutting depth": "/ˈkʌtɪŋ depθ/", "machining center": "/məˈʃiːnɪŋ ˈsentər/",
+      "lathe tool": "/leɪð tuːl/", "bore": "/bɔːr/", "grinder": "/ˈɡraɪndər/",
+      "locksmith": "/ˈlɑːksmɪθ/", "forge": "/fɔːrdʒ/", "stamping": "/ˈstæmpɪŋ/",
+      "weld": "/weld/", "broaching machine": "/ˈbroʊtʃɪŋ məˈʃiːn/",
+      "assembling": "/əˈsemblɪŋ/", "found": "/faʊnd/", "casting": "/ˈkæstɪŋ/",
+      "foundry": "/ˈfaʊndri/", "fluid": "/ˈfluːɪd/", "dynamics": "/daɪˈnæmɪks/",
+      "fluid dynamics": "/ˈfluːɪd daɪˈnæmɪks/", "fluid mechanics": "/ˈfluːɪd məˈkænɪks/",
+      "tangent": "/ˈtændʒənt/", "pressure": "/ˈpreʃər/", "air pressure": "/er ˈpreʃər/",
+      "pneumatic": "/nʊˈmætɪk/", "pneumatic pressure": "/nʊˈmætɪk ˈpreʃər/",
+      "stability": "/stəˈbɪləti/", "medium": "/ˈmiːdiəm/",
+      "invalidation": "/ɪnˌvælɪˈdeɪʃən/", "load": "/loʊd/", "safety": "/ˈseɪfti/",
+      "factor": "/ˈfæktər/", "safety factor": "/ˈseɪfti ˈfæktər/",
+      "reliability": "/rɪˌlaɪəˈbɪləti/", "helix": "/ˈhiːlɪks/", "key": "/kiː/",
+      "rolling bearing": "/ˈroʊlɪŋ ˈberɪŋ/", "sliding": "/ˈslaɪdɪŋ/",
+      "sliding bearing": "/ˈslaɪdɪŋ ˈberɪŋ/", "spring": "/sprɪŋ/",
+      "arrester": "/əˈrestər/", "brake": "/breɪk/", "arrester brake": "/əˈrestər breɪk/",
+      "strap": "/stræp/", "rust": "/rʌst/", "oxidation": "/ˌɑːksəˈdeɪʃən/",
+      "wear": "/wer/", "durability": "/ˌdʊrəˈbɪləti/", "residual stress": "/rɪˈzɪdʒuəl stres/",
+      "cold": "/koʊld/", "cold machining": "/koʊld məˈʃiːnɪŋ/",
+      "electromotor": "/ɪˌlektroʊˈmoʊtər/", "interference": "/ˌɪntərˈfɪrəns/",
+      "fit": "/fɪt/", "interference fit": "/ˌɪntərˈfɪrəns fɪt/",
+      "hotwork": "/ˈhɑːtwɝːrk/", "camera": "/ˈkæmərə/", "rounding": "/ˈraʊndɪŋ/",
+      "rounding chamfer": "/ˈraʊndɪŋ ˈtʃæmfər/", "optimal": "/ˈɑːptɪməl/",
+      "design": "/dɪˈzaɪn/", "optimal design": "/ˈɑːptɪməl dɪˈzaɪn/",
+      "finite": "/ˈfaɪnaɪt/", "element": "/ˈelɪmənt/",
+      "finite element": "/ˈfaɪnaɪt ˈelɪmənt/", "hobbing": "/ˈhɑːbɪŋ/",
+      "shaping": "/ˈʃeɪpɪŋ/", "gear shaping": "/ɡɪr ˈʃeɪpɪŋ/",
+      "actuating": "/ˈæktʃueɪtɪŋ/", "motor": "/ˈmoʊtər/",
+      "actuating motor": "/ˈæktʃueɪtɪŋ ˈmoʊtər/", "servo": "/ˈsɝːvoʊ/",
+      "servo motor": "/ˈsɝːvoʊ ˈmoʊtər/", "milling machine": "/ˈmɪlɪŋ məˈʃiːn/",
+      "drill": "/drɪl/", "drill machine": "/drɪl məˈʃiːn/",
+      "drilling machine": "/ˈdrɪlɪŋ məˈʃiːn/", "boring machine": "/ˈbɔːrɪŋ məˈʃiːn/",
+      "electric": "/ɪˈlektrɪk/", "spark": "/spɑːrk/",
       "electric spark machining": "/ɪˈlektrɪk spɑːrk məˈʃiːnɪŋ/",
-      "electrical": "/ɪˈlektrɪkəl/",
-      "discharge": "/dɪsˈtʃɑːrdʒ/",
+      "electrical": "/ɪˈlektrɪkəl/", "discharge": "/dɪsˈtʃɑːrdʒ/",
       "wire": "/ˈwaɪər/",
       "electrical discharge wire cutting": "/ɪˈlektrɪkəl dɪsˈtʃɑːrdʒ ˈwaɪər ˈkʌtɪŋ/",
-      "diagram": "/ˈdaɪəɡræm/",
-      "phase diagram": "/feɪz ˈdaɪəɡræm/",
-      "solid": "/ˈsɑːlɪd/",
-      "state": "/steɪt/",
-      "changes": "/ˈtʃeɪndʒɪz/",
+      "diagram": "/ˈdaɪəɡræm/", "phase diagram": "/feɪz ˈdaɪəɡræm/",
+      "solid": "/ˈsɑːlɪd/", "state": "/steɪt/", "changes": "/ˈtʃeɪndʒɪz/",
       "solid state phase changes": "/ˈsɑːlɪd steɪt feɪz ˈtʃeɪndʒɪz/",
-      "nonferrous": "/ˌnɑːnˈferəs/",
-      "nonferrous metal": "/ˌnɑːnˈferəs ˈmetəl/",
+      "nonferrous": "/ˌnɑːnˈferəs/", "nonferrous metal": "/ˌnɑːnˈferəs ˈmetəl/",
       "electrochemical": "/ɪˌlektroʊˈkemɪkəl/",
       "electrochemical corrosion": "/ɪˌlektroʊˈkemɪkəl kəˈroʊʒən/",
-      "sheet": "/ʃiːt/",
-      "parts": "/pɑːrts/",
-      "sheet metal parts": "/ʃiːt ˈmetəl pɑːrts/",
-      "spot": "/spɑːt/",
-      "facing": "/ˈfeɪsɪŋ/",
+      "sheet": "/ʃiːt/", "parts": "/pɑːrts/", "sheet metal parts": "/ʃiːt ˈmetəl pɑːrts/",
+      "spot": "/spɑːt/", "facing": "/ˈfeɪsɪŋ/",
       "spot facing machining": "/spɑːt ˈfeɪsɪŋ məˈʃiːnɪŋ/",
-      "hole machining": "/hoʊl məˈʃiːnɪŋ/",
-      "workshop": "/ˈwɝːrkʃɑːp/",
-      "engineer": "/ˌendʒɪˈnɪr/",
-      "mechanical drawing": "/məˈkænɪkəl ˈdrɔːɪŋ/",
-      "projection": "/prəˈdʒekʃən/",
-      "profile": "/ˈproʊfaɪl/",
-      "chart": "/tʃɑːrt/",
-      "profile chart": "/ˈproʊfaɪl tʃɑːrt/",
-      "section view": "/ˈsekʃən vjuː/",
+      "hole machining": "/hoʊl məˈʃiːnɪŋ/", "workshop": "/ˈwɝːrkʃɑːp/",
+      "engineer": "/ˌendʒɪˈnɪr/", "mechanical drawing": "/məˈkænɪkəl ˈdrɔːɪŋ/",
+      "projection": "/prəˈdʒekʃən/", "profile": "/ˈproʊfaɪl/", "chart": "/tʃɑːrt/",
+      "profile chart": "/ˈproʊfaɪl tʃɑːrt/", "section view": "/ˈsekʃən vjuː/",
       "standard component": "/ˈstændərd kəmˈpoʊnənt/",
-      "master piece": "/ˈmæstər piːs/",
-      "master sample": "/ˈmæstər ˈsæmpl/",
-      "part drawing": "/pɑːrt ˈdrɔːɪŋ/",
-      "assembly drawing": "/əˈsembli ˈdrɔːɪŋ/",
+      "master piece": "/ˈmæstər piːs/", "master sample": "/ˈmæstər ˈsæmpl/",
+      "part drawing": "/pɑːrt ˈdrɔːɪŋ/", "assembly drawing": "/əˈsembli ˈdrɔːɪŋ/",
       "size marking": "/saɪz ˈmɑːrkɪŋ/",
       "technical requirements": "/ˈteknɪkəl rɪˈkwaɪərmənts/",
-      "internal force": "/ɪnˈtɝːnəl fɔːrs/",
-      "displacement": "/dɪsˈpleɪsmənt/",
-      "fatigue": "/fəˈtiːɡ/",
-      "limit": "/ˈlɪmɪt/",
-      "fatigue limit": "/fəˈtiːɡ ˈlɪmɪt/",
-      "fracture": "/ˈfræktʃər/",
-      "crack": "/kræk/",
-      "plastic": "/ˈplæstɪk/",
-      "distortion": "/dɪˈstɔːrʃən/",
-      "plastic distortion": "/ˈplæstɪk dɪˈstɔːrʃən/",
+      "internal force": "/ɪnˈtɝːnəl fɔːrs/", "displacement": "/dɪsˈpleɪsmənt/",
+      "fatigue": "/fəˈtiːɡ/", "limit": "/ˈlɪmɪt/", "fatigue limit": "/fəˈtiːɡ ˈlɪmɪt/",
+      "fracture": "/ˈfræktʃər/", "crack": "/kræk/", "plastic": "/ˈplæstɪk/",
+      "distortion": "/dɪˈstɔːrʃən/", "plastic distortion": "/ˈplæstɪk dɪˈstɔːrʃən/",
       "plastic deformation": "/ˈplæstɪk ˌdiːfɔːrˈmeɪʃən/",
-      "brittleness": "/ˈbrɪtəlnəs/",
-      "material": "/məˈtɪriəl/",
+      "brittleness": "/ˈbrɪtəlnəs/", "material": "/məˈtɪriəl/",
       "brittleness material": "/ˈbrɪtəlnəs məˈtɪriəl/",
-      "rigidity criterion": "/rɪˈdʒɪdəti kraɪˈtɪriən/",
-      "washer": "/ˈwɑːʃər/",
-      "spacer": "/ˈspeɪsər/",
-      "passive": "/ˈpæsɪv/",
-      "constraint": "/kənˈstreɪnt/",
-      "passive constraint": "/ˈpæsɪv kənˈstreɪnt/",
-      "rocker": "/ˈrɑːkər/",
-      "cams": "/kæmz/",
-      "slide": "/slaɪd/",
-      "caliper": "/ˈkælɪpər/",
-      "slide caliper": "/slaɪd ˈkælɪpər/",
-      "vernier": "/ˈvɝːniər/",
-      "vernier caliper": "/ˈvɝːniər ˈkælɪpər/",
-      "micrometer": "/maɪˈkrɑːmɪtər/",
-      "calipers": "/ˈkælɪpərz/",
-      "micrometer calipers": "/maɪˈkrɑːmɪtər ˈkælɪpərz/",
-      "probability": "/ˌprɑːbəˈbɪləti/",
-      "random": "/ˈrændəm/",
-      "variable": "/ˈveriəbl/",
-      "random variable": "/ˈrændəm ˈveriəbl/",
-      "permutation": "/ˌpɝːmjəˈteɪʃən/",
+      "rigidity criterion": "/rɪˈdʒɪdəti kraɪˈtɪriən/", "washer": "/ˈwɑːʃər/",
+      "spacer": "/ˈspeɪsər/", "passive": "/ˈpæsɪv/", "constraint": "/kənˈstreɪnt/",
+      "passive constraint": "/ˈpæsɪv kənˈstreɪnt/", "rocker": "/ˈrɑːkər/",
+      "cams": "/kæmz/", "slide": "/slaɪd/", "caliper": "/ˈkælɪpər/",
+      "slide caliper": "/slaɪd ˈkælɪpər/", "vernier": "/ˈvɝːniər/",
+      "vernier caliper": "/ˈvɝːniər ˈkælɪpər/", "micrometer": "/maɪˈkrɑːmɪtər/",
+      "calipers": "/ˈkælɪpərz/", "micrometer calipers": "/maɪˈkrɑːmɪtər ˈkælɪpərz/",
+      "probability": "/ˌprɑːbəˈbɪləti/", "random": "/ˈrændəm/", "variable": "/ˈveriəbl/",
+      "random variable": "/ˈrændəm ˈveriəbl/", "permutation": "/ˌpɝːmjəˈteɪʃən/",
       "combination": "/ˌkɑːmbɪˈneɪʃən/",
       "permutation and combination": "/ˌpɝːmjəˈteɪʃən ənd ˌkɑːmbɪˈneɪʃən/",
-      "mechanical parts": "/məˈkænɪkəl pɑːrts/",
-      "grinding wheel": "/ˈɡraɪndɪŋ wiːl/"
+      "mechanical parts": "/məˈkænɪkəl pɑːrts/", "grinding wheel": "/ˈɡraɪndɪŋ wiːl/"
     };
 
-    const CATEGORY_ORDER = [
-      "结构名称",
-      "加工工艺",
-      "形位公差",
-      "探伤",
-      "热处理",
-      "其它",
-      "通用之件类"
-    ];
-
+    const CATEGORY_ORDER = ["结构名称","加工工艺","形位公差","探伤","热处理","其它","通用之件类"];
     const bank = {};
 
     const selectEl = document.getElementById("categorySelect");
@@ -1362,347 +764,202 @@ V  型块：  V block
     const errorReport = document.getElementById("errorReport");
     const closeSummaryBtn = document.getElementById("closeSummaryBtn");
     const hiddenInput = document.getElementById("hiddenInput");
-
     const speakBtn = document.getElementById("speakBtn");
     const phoneticText = document.getElementById("phoneticText");
+    const mainArea = document.getElementById("mainArea");
 
-    let running = false;
-    let timerInterval = null;
-    let seconds = 0;
-
-    let currentCategory = "";
-    let categoryData = [];
-    let currentIndex = -1;
-
-    let currentItemVariants = [];
-    let typedWords = [];
-    let currentWordIndex = 0;
-
-    let results = [];
-    let totalScore = 0;
-    let totalPossibleWords = 0;
-
+    let running = false, timerInterval = null, seconds = 0;
+    let currentCategory = "", categoryData = [], currentIndex = -1;
+    let currentItemVariants = [], typedWords = [], currentWordIndex = 0;
+    let results = [], totalScore = 0, totalPossibleWords = 0;
     const phoneticCache = new Map();
     let phoneticRequestId = 0;
 
-    // =====================
-    // 音标与发音工具
-    // =====================
-
+    // ===== 音标工具 =====
     function normalizePhoneticKey(text) {
-      return String(text || "")
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .trim();
+      return String(text || "").toLowerCase().replace(/\s+/g, " ").trim();
     }
-
     function getLocalPhonetic(text) {
       const key = normalizePhoneticKey(text);
-
       if (!key) return "";
-
-      if (LOCAL_PHONETICS[key]) {
-        return LOCAL_PHONETICS[key];
-      }
-
+      if (LOCAL_PHONETICS[key]) return LOCAL_PHONETICS[key];
       const words = key.split(/\s+/).filter(Boolean);
-
       if (words.length > 1) {
         const parts = [];
         for (const word of words) {
-          const wordPhonetic = LOCAL_PHONETICS[word];
-          if (!wordPhonetic) return "";
-          parts.push(wordPhonetic);
+          const p = LOCAL_PHONETICS[word];
+          if (!p) return "";
+          parts.push(p);
         }
-        if (parts.length === words.length) {
-          return parts.join(" ");
-        }
+        return parts.join(" ");
       }
-
       return "";
     }
-
     function prepareSpeechText(text) {
       const raw = String(text || "").trim();
       if (!raw) return "";
       const tokens = raw.split(/\s+/).filter(Boolean);
-      const spokenTokens = tokens.map(token => {
-        const lettersOnly = token.replace(/[^A-Za-z]/g, "");
-        if (/^[A-Z]{2,6}$/.test(lettersOnly)) {
-          return lettersOnly.split("").join(" ");
-        }
-        if (/^[A-Z]$/.test(lettersOnly)) {
-          return lettersOnly;
-        }
+      return tokens.map(token => {
+        const letters = token.replace(/[^A-Za-z]/g, "");
+        if (/^[A-Z]{2,6}$/.test(letters)) return letters.split("").join(" ");
+        if (/^[A-Z]$/.test(letters)) return letters;
         return token;
-      });
-      return spokenTokens.join(" ");
+      }).join(" ");
     }
-
     function speakWord(text) {
       if (!text || !("speechSynthesis" in window)) return;
       window.speechSynthesis.cancel();
-      const speechText = prepareSpeechText(text);
-      const utterance = new SpeechSynthesisUtterance(speechText || text);
-      utterance.lang = "en-US";
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      window.speechSynthesis.speak(utterance);
+      const u = new SpeechSynthesisUtterance(prepareSpeechText(text) || text);
+      u.lang = "en-US"; u.rate = 0.9; u.pitch = 1;
+      window.speechSynthesis.speak(u);
     }
-
     async function getOnlinePhoneticForWord(word) {
       try {
-        const cleanWord = String(word || "").trim();
-        if (!cleanWord) return "";
-        const response = await fetch(
-          `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanWord.toLowerCase())}`
-        );
-        if (!response.ok) return "";
-        const data = await response.json();
+        const clean = String(word || "").trim();
+        if (!clean) return "";
+        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(clean.toLowerCase())}`);
+        if (!res.ok) return "";
+        const data = await res.json();
         const entry = Array.isArray(data) ? data[0] : null;
         if (!entry || !Array.isArray(entry.phonetics)) return "";
-        const usPhonetic = entry.phonetics.find(
-          item => item.text && item.audio && item.audio.includes("-us")
-        );
-        if (usPhonetic && usPhonetic.text) return usPhonetic.text;
-        const slashPhonetic = entry.phonetics.find(
-          item => item.text && item.text.startsWith("/")
-        );
-        if (slashPhonetic && slashPhonetic.text) return slashPhonetic.text;
-        const anyPhonetic = entry.phonetics.find(item => item.text);
-        if (anyPhonetic && anyPhonetic.text) return anyPhonetic.text;
-        return "";
-      } catch (error) {
-        return "";
-      }
+        const us = entry.phonetics.find(i => i.text && i.audio && i.audio.includes("-us"));
+        if (us && us.text) return us.text;
+        const slash = entry.phonetics.find(i => i.text && i.text.startsWith("/"));
+        if (slash && slash.text) return slash.text;
+        const any = entry.phonetics.find(i => i.text);
+        return any ? any.text : "";
+      } catch { return ""; }
     }
-
     async function fetchPhonetic(text) {
-      const requestId = ++phoneticRequestId;
-      if (!text) {
-        phoneticText.textContent = "";
-        return;
-      }
-      const localPhonetic = getLocalPhonetic(text);
-      if (localPhonetic) {
-        phoneticText.textContent = localPhonetic;
-        phoneticText.style.color = "#0f766e";
-        return;
-      }
-      phoneticText.textContent = "尝试获取音标中...";
-      phoneticText.style.color = "#94a3b8";
+      const reqId = ++phoneticRequestId;
+      if (!text) { phoneticText.textContent = ""; return; }
+      const local = getLocalPhonetic(text);
+      if (local) { phoneticText.textContent = local; phoneticText.style.color = "#0f766e"; return; }
+      phoneticText.textContent = "尝试获取音标中..."; phoneticText.style.color = "#94a3b8";
       try {
         const words = String(text).split(/\s+/).filter(Boolean);
-        const promises = words.map(async word => {
-          const cacheKey = normalizePhoneticKey(word);
-          if (phoneticCache.has(cacheKey)) {
-            return phoneticCache.get(cacheKey);
-          }
-          const onlinePhonetic = await getOnlinePhoneticForWord(word);
-          phoneticCache.set(cacheKey, onlinePhonetic);
-          return onlinePhonetic;
+        const promises = words.map(async w => {
+          const k = normalizePhoneticKey(w);
+          if (phoneticCache.has(k)) return phoneticCache.get(k);
+          const p = await getOnlinePhoneticForWord(w);
+          phoneticCache.set(k, p);
+          return p;
         });
         const phonetics = await Promise.all(promises);
-        if (requestId !== phoneticRequestId) return;
-        const allSuccess = phonetics.length > 0 && phonetics.every(Boolean);
-        if (allSuccess) {
+        if (reqId !== phoneticRequestId) return;
+        if (phonetics.length && phonetics.every(Boolean)) {
           phoneticText.textContent = phonetics.join(" ") + "（自动音标，仅供参考）";
           phoneticText.style.color = "#475569";
         } else {
-          phoneticText.textContent = "（暂无可靠音标）";
-          phoneticText.style.color = "#94a3b8";
+          phoneticText.textContent = "（暂无可靠音标）"; phoneticText.style.color = "#94a3b8";
         }
-      } catch (error) {
-        if (requestId === phoneticRequestId) {
-          console.error("获取音标失败:", error);
-          phoneticText.textContent = "（音标获取失败）";
-          phoneticText.style.color = "#ef4444";
+      } catch (e) {
+        if (reqId === phoneticRequestId) {
+          phoneticText.textContent = "（音标获取失败）"; phoneticText.style.color = "#ef4444";
         }
       }
     }
 
     speakBtn.addEventListener("click", () => {
       if (!running || currentIndex < 0 || currentIndex >= categoryData.length) return;
-      const targetText = currentItemVariants[0] || "";
-      if (targetText) {
-        speakWord(targetText);
-        fetchPhonetic(targetText);
-      }
+      const target = currentItemVariants[0] || "";
+      if (target) { speakWord(target); fetchPhonetic(target); }
     });
 
-    // =====================
-    // 词库与练习逻辑
-    // =====================
-
+    // ===== 词库 =====
     function initBank() {
       const raw = document.getElementById("raw-data").textContent || "";
       const lines = raw.split(/\r?\n/);
       let current = null;
-
       for (const rawLine of lines) {
         const line = rawLine.trim();
         if (!line) continue;
-
         const heading = line.match(/^([一二三四五六七八九十]+)\s*[、．.]\s*(.+)$/);
         if (heading) {
           current = heading[2].trim();
           if (!bank[current]) bank[current] = [];
           continue;
         }
-
         if (!current || !CATEGORY_ORDER.includes(current)) continue;
-
         const m = line.match(/^(.*?)[：:](.*)$/);
         if (m) {
-          const zh = m[1].trim();
-          const en = m[2].trim();
-          if (zh && en) {
-            bank[current].push([zh, en]);
-          }
+          const zh = m[1].trim(), en = m[2].trim();
+          if (zh && en) bank[current].push([zh, en]);
         }
       }
-
       if (!bank["通用之件类"]) bank["通用之件类"] = [];
-
       const commonParts = [
-        ["工程变更通知(供应商)", "ECN"],
-        ["工程改动要求(客户)", "ECO"],
-        ["工序改动通知", "PCN"],
-        ["制造作业规范", "SOP"],
-        ["物料清单", "BOM"],
-        ["包装规范", "PS"],
-        ["规格", "SPEC"],
-        ["图纸", "DWG"]
+        ["工程变更通知(供应商)", "ECN"], ["工程改动要求(客户)", "ECO"],
+        ["工序改动通知", "PCN"], ["制造作业规范", "SOP"],
+        ["物料清单", "BOM"], ["包装规范", "PS"], ["规格", "SPEC"], ["图纸", "DWG"]
       ];
-
       commonParts.forEach(item => {
-        const exists = bank["通用之件类"].some(x => x[0] === item[0]);
-        if (!exists) bank["通用之件类"].push(item);
+        if (!bank["通用之件类"].some(x => x[0] === item[0])) bank["通用之件类"].push(item);
       });
     }
-
     function populateSelect() {
       selectEl.innerHTML = '<option value="">请选择</option>';
       CATEGORY_ORDER.forEach(cat => {
         if (bank[cat] && bank[cat].length) {
           const opt = document.createElement("option");
-          opt.value = cat;
-          opt.textContent = cat;
+          opt.value = cat; opt.textContent = cat;
           selectEl.appendChild(opt);
         }
       });
     }
-
     function cleanVariant(s) {
-      return String(s || "")
-        .trim()
-        .replace(/[－—–]/g, " ")
-        .replace(/\s+-\s+/g, " ")
-        .replace(/\s+/g, " ")
-        .replace(/^[\s.,;:]+|[\s.,;:]+$/g, "")
-        .trim();
+      return String(s || "").trim()
+        .replace(/[－—–]/g, " ").replace(/\s+-\s+/g, " ")
+        .replace(/\s+/g, " ").replace(/^[\s.,;:]+|[\s.,;:]+$/g, "").trim();
     }
-
     function parseVariants(en) {
       if (!en) return [];
-      let s = String(en)
-        .replace(/\s+或\s+/g, " / ")
-        .replace(/[；;]/g, "/");
-
-      const parts = s
-        .split("/")
-        .map(cleanVariant)
-        .filter(Boolean);
-
+      let s = String(en).replace(/\s+或\s+/g, " / ").replace(/[；;]/g, "/");
+      const parts = s.split("/").map(cleanVariant).filter(Boolean);
       return [...new Set(parts.length ? parts : [cleanVariant(en)])];
     }
-
     function normalizeForCompare(s) {
-      return String(s || "")
-        .toLowerCase()
-        .replace(/[－—–]/g, "-")
-        .replace(/\s+-\s+/g, " ")
-        .replace(/[^a-z0-9\s&-]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
+      return String(s || "").toLowerCase()
+        .replace(/[－—–]/g, "-").replace(/\s+-\s+/g, " ")
+        .replace(/[^a-z0-9\s&-]/g, "").replace(/\s+/g, " ").trim();
     }
-
     function levenshtein(a, b) {
-      a = String(a || "").toLowerCase();
-      b = String(b || "").toLowerCase();
-      const m = a.length;
-      const n = b.length;
-      if (!m) return n;
-      if (!n) return m;
+      a = String(a || "").toLowerCase(); b = String(b || "").toLowerCase();
+      const m = a.length, n = b.length;
+      if (!m) return n; if (!n) return m;
       const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
       for (let i = 0; i <= m; i++) dp[i][0] = i;
       for (let j = 0; j <= n; j++) dp[0][j] = j;
-      for (let i = 1; i <= m; i++) {
-        for (let j = 1; j <= n; j++) {
-          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-          dp[i][j] = Math.min(
-            dp[i - 1][j] + 1,
-            dp[i][j - 1] + 1,
-            dp[i - 1][j - 1] + cost
-          );
-        }
+      for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) {
+        const cost = a[i-1] === b[j-1] ? 0 : 1;
+        dp[i][j] = Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
       }
       return dp[m][n];
     }
-
     function getBestVariant(variants, typed) {
       if (!variants.length) return { variant: "", words: [] };
-
       if (typed.every(w => !w)) {
         const v = variants[0] || "";
         return { variant: v, words: v.split(/\s+/).filter(Boolean) };
       }
-
-      let best = variants[0];
-      let bestScore = Infinity;
-
+      let best = variants[0], bestScore = Infinity;
       for (const v of variants) {
         const words = v.split(/\s+/).filter(Boolean);
         let score = Math.abs(words.length - typed.length) * 3;
-        for (let i = 0; i < typed.length; i++) {
-          score += levenshtein(typed[i] || "", words[i] || "");
-        }
-        if (score < bestScore) {
-          bestScore = score;
-          best = v;
-        }
+        for (let i = 0; i < typed.length; i++) score += levenshtein(typed[i] || "", words[i] || "");
+        if (score < bestScore) { bestScore = score; best = v; }
       }
-
       return { variant: best, words: best.split(/\s+/).filter(Boolean) };
     }
-
     function formatTime(sec) {
-      const m = String(Math.floor(sec / 60)).padStart(2, "0");
-      const s = String(sec % 60).padStart(2, "0");
-      return `${m}:${s}`;
+      return `${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;
     }
-
-    function updateTimerDisplay() {
-      timerEl.textContent = formatTime(seconds);
-    }
-
+    function updateTimerDisplay() { timerEl.textContent = formatTime(seconds); }
     function startTimer() {
-      stopTimer();
-      seconds = 0;
-      updateTimerDisplay();
-      timerInterval = setInterval(() => {
-        seconds++;
-        updateTimerDisplay();
-      }, 1000);
+      stopTimer(); seconds = 0; updateTimerDisplay();
+      timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
     }
-
-    function stopTimer() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-    }
-
+    function stopTimer() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
     function shuffle(arr) {
       const a = arr.slice();
       for (let i = a.length - 1; i > 0; i--) {
@@ -1711,496 +968,335 @@ V  型块：  V block
       }
       return a;
     }
+    function escapeHtml(s) {
+      return String(s || "").replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
 
+    // ===== 练习控制 =====
     function startPractice() {
       const cat = selectEl.value;
       if (!cat || !bank[cat] || !bank[cat].length) return;
-
       currentCategory = cat;
       categoryData = shuffle(bank[cat]);
       currentIndex = 0;
-
-      results = [];
-      totalScore = 0;
-      totalPossibleWords = 0;
-
+      results = []; totalScore = 0; totalPossibleWords = 0;
       running = true;
-      selectEl.disabled = true;
-      startBtn.disabled = true;
-      endBtn.disabled = false;
-      speakBtn.disabled = false;
-
+      selectEl.disabled = true; startBtn.disabled = true;
+      endBtn.disabled = false; speakBtn.disabled = false;
       startTimer();
       renderCurrent();
-      startBtn.blur();
-      selectEl.blur();
-
-      // 移动端：开始练习后不自动聚焦隐藏输入框（用户点击槽位再聚焦）
+      startBtn.blur(); selectEl.blur();
     }
 
     function renderCurrent() {
       if (!categoryData.length || currentIndex >= categoryData.length) return;
-
       const item = categoryData[currentIndex];
       chineseWordEl.textContent = item[0];
       progressEl.textContent = `第 ${currentIndex + 1} / ${categoryData.length} 题`;
-
       phoneticRequestId++;
       phoneticText.textContent = "";
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
       currentItemVariants = parseVariants(item[1]);
       const firstWords = (currentItemVariants[0] || "").split(/\s+/).filter(Boolean);
       const slotCount = Math.max(1, firstWords.length);
-
       typedWords = Array(slotCount).fill("");
       currentWordIndex = 0;
-
-      // 清空隐藏输入框，避免上一题残留
       hiddenInput.value = "";
-
       renderInput();
+      // 切题后确保输入区可见，键盘不遮挡
+      setTimeout(ensureInputVisible, 100);
+      // 保持焦点（若键盘已打开）
+      if (document.activeElement === hiddenInput) {
+        setTimeout(() => hiddenInput.focus(), 150);
+      }
     }
 
+    // ===== 增量渲染（核心修复） =====
     function renderInput() {
-      inputAreaEl.innerHTML = "";
+      // 槽位数量变化时重建骨架
+      if (inputAreaEl.children.length !== typedWords.length) {
+        inputAreaEl.innerHTML = "";
+        for (let i = 0; i < typedWords.length; i++) {
+          const slot = document.createElement("div");
+          slot.className = "word-slot";
+          slot.dataset.index = i;
+          slot.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (!running) return;
+            currentWordIndex = i;
+            updateSlots();
+            hiddenInput.focus();
+            setTimeout(ensureInputVisible, 50);
+          });
+          inputAreaEl.appendChild(slot);
+        }
+      }
+      updateSlots();
+    }
 
+    function updateSlots() {
       const best = getBestVariant(currentItemVariants, typedWords);
-
       for (let i = 0; i < typedWords.length; i++) {
-        const slot = document.createElement("div");
-        slot.className = "word-slot" + (i === currentWordIndex ? " active" : "");
-        slot.dataset.index = i;
-
+        const slot = inputAreaEl.children[i];
+        if (!slot) continue;
+        slot.classList.toggle("active", i === currentWordIndex);
         const targetWord = best.words[i] || "";
         slot.style.minWidth = Math.max(4, targetWord.length + 2) + "ch";
-
         const typed = typedWords[i] || "";
-
+        let html = "";
         if (!typed) {
-          const ph = document.createElement("span");
-          ph.className = "placeholder";
-          ph.textContent = "_".repeat(Math.max(3, targetWord.length || 3));
-          slot.appendChild(ph);
+          html = `<span class="placeholder">${"_".repeat(Math.max(3, targetWord.length || 3))}</span>`;
         } else {
           for (let j = 0; j < typed.length; j++) {
-            const span = document.createElement("span");
-            span.textContent = typed[j];
-
-            const targetChar = (targetWord[j] || "").toLowerCase();
-            if (targetChar && typed[j].toLowerCase() === targetChar) {
-              span.className = "ok";
-            } else {
-              span.className = "bad";
-            }
-
-            slot.appendChild(span);
+            const tc = (targetWord[j] || "").toLowerCase();
+            const cls = tc && typed[j].toLowerCase() === tc ? "ok" : "bad";
+            html += `<span class="${cls}">${escapeHtml(typed[j])}</span>`;
           }
-
           if (targetWord.length > typed.length) {
-            const rem = document.createElement("span");
-            rem.className = "placeholder";
-            rem.textContent = "_".repeat(targetWord.length - typed.length);
-            slot.appendChild(rem);
+            html += `<span class="placeholder">${"_".repeat(targetWord.length - typed.length)}</span>`;
           }
         }
-
-        // 点击槽位：聚焦隐藏输入框，唤起键盘，并设置当前单词索引
-        slot.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (!running) return;
-          currentWordIndex = i;
-          renderInput();
-          hiddenInput.focus();
-        });
-
-        inputAreaEl.appendChild(slot);
+        slot.innerHTML = html;
       }
-
-      // 点击整个输入区域也聚焦
-      inputAreaEl.onclick = (e) => {
-        if (!running) return;
-        // 如果点到了具体槽位，槽位自己的 click 已处理
-        if (e.target.closest(".word-slot")) return;
-        hiddenInput.focus();
-      };
     }
 
+    // ===== 确保输入区可见 =====
+    function ensureInputVisible() {
+      if (!running) return;
+      // 用 scrollIntoView 居中，避免被键盘遮挡
+      inputAreaEl.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+
+    // ===== 键盘高度感知 =====
+    function adjustForKeyboard() {
+      if (!window.visualViewport) return;
+      const vv = window.visualViewport;
+      const kb = Math.max(0, window.innerHeight - vv.height);
+      if (kb > 120) {
+        mainArea.style.paddingBottom = (kb + 16) + "px";
+      } else {
+        mainArea.style.paddingBottom = "calc(16px + env(safe-area-inset-bottom))";
+      }
+      if (running && document.activeElement === hiddenInput) {
+        setTimeout(ensureInputVisible, 80);
+      }
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", adjustForKeyboard);
+      window.visualViewport.addEventListener("scroll", adjustForKeyboard);
+    }
+    window.addEventListener("resize", adjustForKeyboard);
+
+    // ===== 评估与提交 =====
     function evaluateCurrent() {
       const item = categoryData[currentIndex];
       const variants = currentItemVariants.length ? currentItemVariants : parseVariants(item[1]);
-
-      const typedPhrase = typedWords
-        .map(w => w.trim())
-        .filter(Boolean)
-        .join(" ")
-        .replace(/\s+/g, " ")
-        .trim();
-
+      const typedPhrase = typedWords.map(w => w.trim()).filter(Boolean).join(" ").replace(/\s+/g," ").trim();
       const normalizedUser = normalizeForCompare(typedPhrase);
-
-      let matchedVariant = null;
+      let matched = null;
       for (const v of variants) {
-        if (normalizedUser && normalizeForCompare(v) === normalizedUser) {
-          matchedVariant = v;
-          break;
-        }
+        if (normalizedUser && normalizeForCompare(v) === normalizedUser) { matched = v; break; }
       }
-
       const best = getBestVariant(variants, typedWords);
-
-      let correctWords = [];
-      let possibleWords = 0;
-      let gained = 0;
-      let wordChecks = [];
-
-      if (matchedVariant) {
-        correctWords = matchedVariant.split(/\s+/).filter(Boolean);
+      let correctWords = [], possibleWords = 0, gained = 0, wordChecks = [];
+      if (matched) {
+        correctWords = matched.split(/\s+/).filter(Boolean);
         possibleWords = correctWords.length;
         gained = possibleWords * 10;
         wordChecks = correctWords.map(() => true);
       } else {
         correctWords = best.words.length ? best.words : [""];
         possibleWords = correctWords.length;
-        wordChecks = correctWords.map(
-          (w, i) => normalizeForCompare(typedWords[i] || "") === normalizeForCompare(w)
-        );
+        wordChecks = correctWords.map((w, i) =>
+          normalizeForCompare(typedWords[i] || "") === normalizeForCompare(w));
         gained = wordChecks.filter(Boolean).length * 10;
       }
-
       return {
-        zh: item[0],
-        user: typedPhrase || "(未输入)",
-        correct: variants.join(" / "),
-        correctWords,
-        possibleWords,
-        gained,
-        wordChecks
+        zh: item[0], user: typedPhrase || "(未输入)",
+        correct: variants.join(" / "), correctWords, possibleWords, gained, wordChecks
       };
     }
 
     function submitCurrent() {
       if (!running || currentIndex < 0 || currentIndex >= categoryData.length) return;
-
-      const evaluation = evaluateCurrent();
-      results.push(evaluation);
-      totalScore += evaluation.gained;
-      totalPossibleWords += evaluation.possibleWords;
-
+      const ev = evaluateCurrent();
+      results.push(ev); totalScore += ev.gained; totalPossibleWords += ev.possibleWords;
       currentIndex++;
-
-      if (currentIndex >= categoryData.length) {
-        finishPractice();
-      } else {
-        renderCurrent();
-      }
+      if (currentIndex >= categoryData.length) finishPractice();
+      else renderCurrent();
     }
 
     function endPractice() {
       if (!running) return;
       if (currentIndex >= 0 && currentIndex < categoryData.length) {
-        const evaluation = evaluateCurrent();
-        results.push(evaluation);
-        totalScore += evaluation.gained;
-        totalPossibleWords += evaluation.possibleWords;
+        const ev = evaluateCurrent();
+        results.push(ev); totalScore += ev.gained; totalPossibleWords += ev.possibleWords;
       }
       finishPractice();
     }
 
     function finishPractice() {
-      running = false;
-      stopTimer();
-      endBtn.disabled = true;
-      speakBtn.disabled = true;
-
+      running = false; stopTimer();
+      endBtn.disabled = true; speakBtn.disabled = true;
       phoneticRequestId++;
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-
-      // 隐藏键盘
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
       hiddenInput.blur();
-
       showSummary();
     }
 
     function showSummary() {
       const correctItems = results.filter(r => r.gained === r.possibleWords * 10).length;
       const correctWords = Math.round(totalScore / 10);
-
       summaryStats.innerHTML = `
         <div><strong>练习大类：</strong>${escapeHtml(currentCategory)}</div>
         <div><strong>用时：</strong>${formatTime(seconds)}</div>
         <div><strong>总分：</strong>${totalScore} / ${totalPossibleWords * 10}</div>
         <div><strong>答对单词数：</strong>${correctWords} / ${totalPossibleWords}</div>
-        <div><strong>完全答对词条数：</strong>${correctItems} / ${results.length}</div>
-      `;
-
+        <div><strong>完全答对词条数：</strong>${correctItems} / ${results.length}</div>`;
       errorReport.innerHTML = "";
-
-      const wrongResults = results.filter(r => r.gained < r.possibleWords * 10);
-
-      if (!wrongResults.length) {
+      const wrong = results.filter(r => r.gained < r.possibleWords * 10);
+      if (!wrong.length) {
         errorReport.innerHTML = "<p style='color:#16a34a;font-weight:bold;'>全部正确，太棒了！</p>";
       } else {
-        wrongResults.forEach(r => {
+        wrong.forEach(r => {
           const box = document.createElement("div");
           box.className = "wrong-item";
-
           const zh = document.createElement("div");
-          zh.className = "zh";
-          zh.textContent = r.zh;
-
+          zh.className = "zh"; zh.textContent = r.zh;
           const userLine = document.createElement("div");
-          const userLabel = document.createElement("span");
-          userLabel.className = "line-label";
-          userLabel.textContent = "你的输入：";
-          userLine.appendChild(userLabel);
-
+          const lbl = document.createElement("span");
+          lbl.className = "line-label"; lbl.textContent = "你的输入：";
+          userLine.appendChild(lbl);
           if (r.user === "(未输入)") {
-            const span = document.createElement("span");
-            span.className = "missed-word";
-            span.textContent = "(未输入)";
-            userLine.appendChild(span);
+            const s = document.createElement("span");
+            s.className = "missed-word"; s.textContent = "(未输入)";
+            userLine.appendChild(s);
           } else {
-            const userWords = r.user.split(/\s+/).filter(Boolean);
-            const maxLen = Math.max(userWords.length, r.correctWords.length);
-            for (let i = 0; i < maxLen; i++) {
-              const span = document.createElement("span");
-              if (i < userWords.length) {
-                span.textContent = userWords[i];
-                span.className = r.wordChecks[i] ? "correct-word" : "wrong-word";
+            const uw = r.user.split(/\s+/).filter(Boolean);
+            const max = Math.max(uw.length, r.correctWords.length);
+            for (let i = 0; i < max; i++) {
+              const s = document.createElement("span");
+              if (i < uw.length) {
+                s.textContent = uw[i];
+                s.className = r.wordChecks[i] ? "correct-word" : "wrong-word";
               } else {
-                span.textContent = "___";
-                span.className = "missed-word";
+                s.textContent = "___"; s.className = "missed-word";
               }
-              userLine.appendChild(span);
+              userLine.appendChild(s);
             }
           }
-
           const correctLine = document.createElement("div");
-          const correctLabel = document.createElement("span");
-          correctLabel.className = "line-label";
-          correctLabel.textContent = "正确答案：";
-          correctLine.appendChild(correctLabel);
+          const clbl = document.createElement("span");
+          clbl.className = "line-label"; clbl.textContent = "正确答案：";
+          correctLine.appendChild(clbl);
           r.correctWords.forEach(w => {
-            const span = document.createElement("span");
-            span.className = "correct-word";
-            span.textContent = w;
-            correctLine.appendChild(span);
+            const s = document.createElement("span");
+            s.className = "correct-word"; s.textContent = w;
+            correctLine.appendChild(s);
           });
-
           const allLine = document.createElement("div");
           allLine.className = "all-answer";
           allLine.textContent = "可接受答案：" + r.correct;
-
-          box.appendChild(zh);
-          box.appendChild(userLine);
-          box.appendChild(correctLine);
-          box.appendChild(allLine);
-
+          box.appendChild(zh); box.appendChild(userLine);
+          box.appendChild(correctLine); box.appendChild(allLine);
           errorReport.appendChild(box);
         });
       }
-
       summaryOverlay.hidden = false;
     }
 
     function closeSummary() {
       summaryOverlay.hidden = true;
-
-      selectEl.disabled = false;
-      selectEl.value = "";
-      startBtn.disabled = true;
-      endBtn.disabled = true;
-      speakBtn.disabled = true;
-
-      running = false;
-      currentIndex = -1;
-      categoryData = [];
-      results = [];
-      totalScore = 0;
-      totalPossibleWords = 0;
-
-      seconds = 0;
-      updateTimerDisplay();
-
+      selectEl.disabled = false; selectEl.value = "";
+      startBtn.disabled = true; endBtn.disabled = true; speakBtn.disabled = true;
+      running = false; currentIndex = -1; categoryData = [];
+      results = []; totalScore = 0; totalPossibleWords = 0;
+      seconds = 0; updateTimerDisplay();
       chineseWordEl.textContent = "请选择大类，然后点击“开始练习”";
-      inputAreaEl.innerHTML = "";
-      progressEl.textContent = "";
-      phoneticText.textContent = "";
-
-      hiddenInput.value = "";
-      hiddenInput.blur();
-
+      inputAreaEl.innerHTML = ""; progressEl.textContent = ""; phoneticText.textContent = "";
+      hiddenInput.value = ""; hiddenInput.blur();
+      mainArea.style.paddingBottom = "calc(16px + env(safe-area-inset-bottom))";
       phoneticRequestId++;
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     }
 
-    function escapeHtml(s) {
-      return String(s || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    // =====================
-    // iOS 键盘核心：隐藏 input 事件处理
-    // =====================
-
-    // 标记是否刚刚通过 Enter 提交（避免 iOS 上 Enter 产生额外字符）
-    let justSubmitted = false;
-
-    hiddenInput.addEventListener("input", (e) => {
-      if (!running) {
-        hiddenInput.value = "";
-        return;
-      }
-
-      const rawValue = hiddenInput.value;
-
-      // iOS 上输入法可能一次性给出多个字符或替换组合，我们取最后一个字符处理
-      // 但更稳妥的方式是：将 rawValue 与之前的记录做差异，这里采用简单策略：
-      // 只处理单个新字符（大多数场景），并允许粘贴整词（高级场景暂时不处理）
-      // 为了兼容中文输入法，我们只处理英文字母、数字和少量符号。
-
-      // 取最后一个字符（兼容 input 事件可能带上的旧内容）
-      // 实际上，每次 input 后 hiddenInput.value 是完整内容，我们只关心新输入的字符。
-      // 但由于我们会清空，所以 value 长度通常为 1。
-      // 但为了兼容粘贴，这里做一次逐字符处理。
-
-      const newChars = rawValue;
-
-      // 清空隐藏输入框，避免累积
+    // ===== iOS 键盘输入处理（核心） =====
+    hiddenInput.addEventListener("input", () => {
+      if (!running) { hiddenInput.value = ""; return; }
+      const newChars = hiddenInput.value;
       hiddenInput.value = "";
-
       if (!newChars) return;
 
       for (const ch of newChars) {
-        // 忽略控制字符
         if (ch === "\n" || ch === "\r") continue;
-
-        // Enter 已由 keydown 处理，这里不重复
         if (ch === " ") {
-          // 空格：切换到下一个单词
-          if (currentWordIndex < typedWords.length - 1) {
-            currentWordIndex++;
-          }
-          renderInput();
+          if (currentWordIndex < typedWords.length - 1) currentWordIndex++;
+          updateSlots();
           continue;
         }
-
-        // 允许的字符：字母、数字、&、-、'
         if (/^[a-zA-Z0-9&\-']$/.test(ch)) {
-          // 追加到当前单词
           typedWords[currentWordIndex] += ch.toLowerCase();
-
-          // 自动跳转到下一个单词（如果当前单词达到目标长度且不是最后一个）
           const best = getBestVariant(currentItemVariants, typedWords);
-          const targetWord = best.words[currentWordIndex] || "";
-
-          if (
-            targetWord &&
-            typedWords[currentWordIndex].length >= targetWord.length &&
-            currentWordIndex < typedWords.length - 1
-          ) {
+          const tw = best.words[currentWordIndex] || "";
+          if (tw && typedWords[currentWordIndex].length >= tw.length && currentWordIndex < typedWords.length - 1) {
             currentWordIndex++;
           }
-
-          renderInput();
+          updateSlots();
         }
-        // 其他字符忽略
       }
+      // 保持键盘焦点并确保可见
+      requestAnimationFrame(() => {
+        ensureInputVisible();
+        // 确保焦点仍在隐藏输入框
+        if (running && document.activeElement !== hiddenInput) {
+          hiddenInput.focus();
+        }
+      });
     });
 
-    // 键盘上的 Enter 提交
     hiddenInput.addEventListener("keydown", (e) => {
       if (!running) return;
-
       if (e.key === "Enter") {
         e.preventDefault();
-        justSubmitted = true;
         submitCurrent();
-        // 提交后 renderCurrent 会清空 hiddenInput.value 并重置焦点
-        // 但为了保持键盘不收起，再次聚焦
-        setTimeout(() => {
-          if (running) hiddenInput.focus();
-          justSubmitted = false;
-        }, 50);
+        setTimeout(() => { if (running) hiddenInput.focus(); }, 60);
         return;
       }
-
-      // 退格处理（iOS 上可能触发 keydown）
       if (e.key === "Backspace") {
-        // 注意：在某些 iOS 键盘上，退格可能不触发 keydown（尤其是第三方键盘），
-        // 但系统英文键盘通常会触发。如果 input 事件中检测到删除，也可处理。
-        // 这里我们同时监听 input 做兜底：如果 value 变短，说明删除。
-        // 但因为我们每次 input 后清空 value，无法直接比较长度。
-        // 改用 keydown 处理退格是可靠的（系统键盘）。
         e.preventDefault();
-
         if (typedWords[currentWordIndex].length > 0) {
           typedWords[currentWordIndex] = typedWords[currentWordIndex].slice(0, -1);
         } else if (currentWordIndex > 0) {
           currentWordIndex--;
         }
-
-        renderInput();
+        updateSlots();
         hiddenInput.value = "";
+        requestAnimationFrame(ensureInputVisible);
         return;
       }
     });
 
-    // 兜底：监听 keydown 处理退格（某些情况下 input 事件不够用）
-    // 上面已经处理。
-
-    // 点击输入区域外，让隐藏输入框失焦（收起键盘）
-    document.addEventListener("click", (e) => {
-      if (!running) return;
-      if (e.target.closest("#inputArea")) return;
-      if (e.target.closest("#hiddenInput")) return;
-      // 点击其他区域，收起键盘但不中断练习
-      // hiddenInput.blur();
-    });
-
-    // =====================
-    // 其他事件绑定
-    // =====================
-
+    // ===== 事件绑定 =====
     selectEl.addEventListener("change", () => {
       if (selectEl.value) {
         startBtn.disabled = false;
         chineseWordEl.textContent = `已选择：${selectEl.value}，请点击“开始练习”`;
-        inputAreaEl.innerHTML = "";
-        progressEl.textContent = "";
-        phoneticText.textContent = "";
-        seconds = 0;
-        updateTimerDisplay();
+        inputAreaEl.innerHTML = ""; progressEl.textContent = ""; phoneticText.textContent = "";
+        seconds = 0; updateTimerDisplay();
       } else {
         startBtn.disabled = true;
         chineseWordEl.textContent = "请选择大类，然后点击“开始练习”";
-        inputAreaEl.innerHTML = "";
-        progressEl.textContent = "";
-        phoneticText.textContent = "";
+        inputAreaEl.innerHTML = ""; progressEl.textContent = ""; phoneticText.textContent = "";
       }
     });
 
     startBtn.addEventListener("click", startPractice);
     endBtn.addEventListener("click", endPractice);
     closeSummaryBtn.addEventListener("click", closeSummary);
+    document.addEventListener("dblclick", e => e.preventDefault(), { passive: false });
 
-    // 防止 iOS 双击缩放（由 viewport 的 user-scalable=no 处理，这里加一道保险）
-    document.addEventListener("dblclick", (e) => {
-      e.preventDefault();
-    }, { passive: false });
-
-    // 初始化
+    // ===== 初始化 =====
     initBank();
     populateSelect();
   </script>
